@@ -1,0 +1,77 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+/steammarketchecker-rest/.idea/
+/steammarketchecker-rest/target/
+/steammarketchecker-rest/offers/
+/steammarketchecker-rest/resumes/
+
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/steammarketchecker-web/.angular
+/steammarketchecker-web/dist
+/steammarketchecker-web/release-builds
+/steammarketchecker-web/tmp
+/steammarketchecker-web/out-tsc
+/steammarketchecker-web/bazel-out
+
+# Node
+/steammarketchecker-web/node_modules
+/steammarketchecker-web/npm-debug.log
+/steammarketchecker-web/yarn-error.log
+
+# IDEs and editors
+/steammarketchecker-web/.project
+/steammarketchecker-web/.classpath
+/steammarketchecker-web/.c9/
+/steammarketchecker-web/*.launch
+/steammarketchecker-web/.settings/
+/steammarketchecker-web/*.sublime-workspace
+
+# Visual Studio Code
+/steammarketchecker-web/.vscode/*
+/steammarketchecker-web/!.vscode/settings.json
+/steammarketchecker-web/!.vscode/tasks.json
+/steammarketchecker-web/!.vscode/launch.json
+/steammarketchecker-web/!.vscode/extensions.json
+/steammarketchecker-web/.history/*
+
+# Miscellaneous
+/steammarketchecker-web/.angular/cache
+/steammarketchecker-web/.sass-cache/
+/steammarketchecker-web/connect.lock
+/steammarketchecker-web/coverage
+/steammarketchecker-web/libpeerconnection.log
+/steammarketchecker-web/testem.log
+/steammarketchecker-web/typings
+
+# System files
+/steammarketchecker-web/.DS_Store
+/steammarketchecker-web/Thumbs.db
+
+
+/steammarketchecker-web/.idea/
+/steammarketchecker-web/package-lock.json

@@ -1,0 +1,89 @@
+<!-- Button to clear selection -->
+<!--<button (click)="clearSelection()">Clear Selection</button>-->
+
+<div class="container ">
+  <p-toolbar>
+    <div class="table-name">Дефолт родитель</div>
+    <nav>
+      <p-button icon="pi pi-sync"
+                styleClass="p-button-rounded p-button-warning p-button-outlined"
+                (click)="getAllDefaultParentsFromApi()">
+      </p-button>
+
+      <p-button
+        icon="pi pi-filter"
+        styleClass="p-button-outlined p-button-warning"
+        (onClick)="showFilter()">
+      </p-button>
+
+      <p-button label="Добавить"
+                icon="pi pi-plus"
+                styleClass="p-button-outlined"
+                (click)="createDefaultParent()">
+      </p-button>
+      <p-button label="Изменить"
+                icon="pi pi-pencil"
+                styleClass="p-button-outlined p-button-help"
+                [disabled]="!selectedDefaultParent"
+                (onClick)="updateDefaultParent()">
+      </p-button>
+      <p-button label="Удалить"
+                icon="pi pi-trash"
+                styleClass="p-button-outlined p-button-danger"
+                [disabled]="!selectedDefaultParent"
+                (onClick)="archiveRequest()">
+      </p-button>
+
+      <p-checkbox
+        [(ngModel)]="showArchive"
+        label="Показать только архив"
+        [binary]="true"
+        inputId="binary"
+        (ngModelChange)="showArchivePressed()">
+      </p-checkbox>
+    </nav>
+
+  </p-toolbar>
+
+  <ag-grid-angular
+    style="width: 100%; height: 100%"
+    class="ag-theme-alpine"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowData]="rowData"
+    [overlayLoadingTemplate]="overlayLoadingTemplate"
+    [loadingCellRenderer]="loadingCellRenderer"
+    [loadingCellRendererParams]="loadingCellRendererParams"
+    [overlayNoRowsTemplate]="'Данные отсутствуют'"
+    [rowSelection]="'single'"
+    [animateRows]="true"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)">
+  </ag-grid-angular>
+
+  <app-default-child [defaultParent]="selectedDefaultParent" class="request-position"></app-default-child>
+
+</div>
+<!-- AG Grid Angular Component -->
+
+<app-default-parent-dialog [openDialog]="openDialog"
+                    *ngIf="openDialog"
+                    [item]="selectedDefaultParent"
+                    [editMode]="dialogEditMode"
+                    (submit)="onDialogSubmit($event)">
+</app-default-parent-dialog>
+
+
+<p-confirmDialog #cd [style]="{width: '50vw'}">
+  <ng-template pTemplate="header">
+    <h3>Архивация</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button type="button" pButton icon="pi pi-check" label="Да" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="Нет" (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>
+
+<ng-container *ngIf="loading">
+  <div *ngIf="loading" class="loading">Загрузка...</div>
+</ng-container>

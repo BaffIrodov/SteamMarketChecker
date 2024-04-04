@@ -1,0 +1,17 @@
+spring:
+  mail:
+    host: smtp.eeemail.com
+    port: 465
+    username: user@eeemail.com
+    password: 123
+    protocol: smtp
+    tls: true
+    debug: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true

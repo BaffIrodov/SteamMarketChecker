@@ -1,0 +1,85 @@
+<ng-container>
+  <p-toolbar id="toolbar-by-id" class="toolbar">
+    <div class="p-toolbar-group-start">
+      <h3 class="logo" routerLink="/">
+        <img pTooltip="Перейти домой"
+             src="assets/logo.svg"
+             alt="DefaultCrud">
+      </h3>
+    </div>
+
+    <div class="splitter"></div>
+
+    <div *ngIf="userAuth" class="p-toolbar-group-end">
+      <div class="burger-button" [ngClass]="{'active': isActiveBurger}"
+           (click)="isActiveBurger = !isActiveBurger">
+        <span></span>
+      </div>
+
+      <div class="burger-menu" [ngClass]="{'active': isActiveBurger}">
+        <div class="burger-menu__nav-buttons">
+          <p-button label="Главная"
+                    icon="pi pi-home"
+                    styleClass="p-button-outlined"
+                    routerLink="/">
+          </p-button>
+          <p-button label="Дефолт родитель"
+                    icon="pi pi-file-edit"
+                    styleClass="p-button-outlined"
+                    routerLink="/event">
+          </p-button>
+        </div>
+        <div class="burger-menu__info-ring">
+
+          <p-button [label]="userFullName || ''"
+                    [icon]="'pi pi-user'"
+                    [pTooltip]="'Роль пользователя: ' + userRole"
+                    (onClick)="openUserDialog()"
+                    class="person_info"
+                    [tooltipPosition]="'left'">
+          </p-button>
+
+          <div *ngIf="userAuth" class="splitter"></div>
+
+          <div *ngIf="userAuth" (click)="showNewPositions()" class="ring" pTooltip="Посмотреть уведомления">
+            <i style="font-size: 26px" [class.bell-anim]="messages.length > 0" class="pi pi-bell"></i>
+            <span style="font-size: 22px; margin-left: 10px">({{messages.length}})</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </p-toolbar>
+
+  <router-outlet></router-outlet>
+</ng-container>
+
+<p-sidebar [(visible)]="display" position="right">
+  <div class="container-message">
+    <h3 *ngIf="messages.length == 0">Нет новых сообщений</h3>
+    <div class="message" *ngFor="let message of messages; let idx = index;">
+      <div class="message__icon" (click)="closeOneInfo(message.id, idx)"><i class="pi pi-times"></i></div>
+      <div class="message__text">{{message.customText}}</div>
+      <p-button
+        [pTooltip]="'Прочитано'"
+        tooltipPosition="left"
+        class="approve"
+        (onClick)="readMessage(message)"
+        icon="pi pi-check" styleClass="p-button-success">
+      </p-button>
+    </div>
+  </div>
+  <div style="width: 100%; text-align: center; padding-top: 10px">
+    <button pButton type="button" class="p-button-success" label="Прочитать все" (click)="closeAllInfo()"></button>
+  </div>
+</p-sidebar>
+
+<app-user-dialog #userDialogComponent *ngIf="user" [openDialog]="displayUserDialog" [currentUser]="this.user"
+                 (submit)="displayUserDialog = $event" (reloadUser)="this.reloadUser($event)"
+                 (logout)="this.logoutUser($event)">
+</app-user-dialog>
+
+<p-toast></p-toast>
+
+
+
