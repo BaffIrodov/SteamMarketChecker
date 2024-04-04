@@ -1,0 +1,29 @@
+package net.smc.entities;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// таблица представленных на ТП лотов
+@Entity
+@Data
+@NoArgsConstructor
+public class Lot {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "itemId")
+    private Item item;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "lot_id")
+    private List<LotSticker> lotStickerList = new ArrayList<>();
+
+}
