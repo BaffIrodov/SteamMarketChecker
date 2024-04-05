@@ -123,3 +123,112 @@ public class CommonUtils {
         return splittedString[idPosition];
     }
 }
+
+
+https://steamcommunity.com/market/priceoverview/?appid=730&currency=3&market_hash_name=StatTrak™%20M4A1-S%20%7C%20Hyper%20Beast%20(Minimal%20Wear)
+
+
+        http://steamcommunity.com/market/pricehistory/?country=DE&currency=3&appid=440&market_hash_name=Specialized%20Killstreak%20Brass%20Beast
+
+
+        https://steamcommunity.com/market/listings/730/AWP%20%7C%20Fever%20Dream%20%28Factory%20New%29/render/?query=&start=10&count=10&country=RU&language=russian&currency=5 ---- вот это правда!
+
+
+        "4860020405071017516": {
+        "listingid": "4860020405071017516",
+        "price": 130349,
+        "fee": 19551,
+        "publisher_fee_app": 730,
+        "publisher_fee_percent": "0.100000001490116119",
+        "currencyid": 2005,
+        "steam_fee": 6517,
+        "publisher_fee": 13034,
+        "converted_price": 130349,
+        "converted_fee": 19551,
+        "converted_currencyid": 2005,
+        "converted_steam_fee": 6517,
+        "converted_publisher_fee": 13034,
+        "converted_price_per_unit": 130349,
+        "converted_fee_per_unit": 19551,
+        "converted_steam_fee_per_unit": 6517,
+        "converted_publisher_fee_per_unit": 13034,
+        "asset": {
+        "currency": 0,
+        "appid": 730,
+        "contextid": "2",
+        "id": "36748568048",
+        "amount": "1",
+        "market_actions": [
+        {
+        "link": "steam:\/\/rungame\/730\/76561202255233023\/+csgo_econ_action_preview%20M%listingid%A%assetid%D5062758769216870025",
+        "name": "Осмотреть в игре…"
+        }
+        ]
+        }
+        },
+
+        "4869028237732679807": {
+        "listingid": "4869028237732679807",
+        "price": 1309,
+        "fee": 195,
+        "publisher_fee_app": 730,
+        "publisher_fee_percent": "0.100000001490116119",
+        "currencyid": 2003,
+        "steam_fee": 65,
+        "publisher_fee": 130,
+        "converted_price": 130933,
+        "converted_fee": 19639,
+        "converted_currencyid": 2005,
+        "converted_steam_fee": 6546,
+        "converted_publisher_fee": 13093,
+        "converted_price_per_unit": 130933,
+        "converted_fee_per_unit": 19639,
+        "converted_steam_fee_per_unit": 6546,
+        "converted_publisher_fee_per_unit": 13093,
+        "asset": {
+        "currency": 0,
+        "appid": 730,
+        "contextid": "2",
+        "id": "30067991847",
+        "amount": "1",
+        "market_actions": [
+        {
+        "link": "steam:\/\/rungame\/730\/76561202255233023\/+csgo_econ_action_preview%20M%listingid%A%assetid%D14018136423453315213",
+        "name": "Осмотреть в игре…"
+        }
+        ]
+        }
+        },
+        "7109567244062181078": {
+        "listingid": "7109567244062181078",
+        "price": 1300,
+        "fee": 195,
+        "publisher_fee_app": 730,
+        "publisher_fee_percent": "0.100000001490116119",
+        "currencyid": 2003,
+        "steam_fee": 65,
+        "publisher_fee": 130,
+        "converted_price": 130033,
+        "converted_fee": 19504,
+        "converted_currencyid": 2005,
+        "converted_steam_fee": 6501,
+        "converted_publisher_fee": 13003,
+        "converted_price_per_unit": 130033,
+        "converted_fee_per_unit": 19504,
+        "converted_steam_fee_per_unit": 6501,
+        "converted_publisher_fee_per_unit": 13003,
+        "asset": {
+        "currency": 0,
+        "appid": 730,
+        "contextid": "2",
+        "id": "14896698431",
+        "amount": "1",
+        "market_actions": [
+        {
+        "link": "steam:\/\/rungame\/730\/76561202255233023\/+csgo_econ_action_preview%20M%listingid%A%assetid%D7639301691980652205",
+        "name": "Осмотреть в игре…"
+        }
+        ]
+        }
+        },
+
