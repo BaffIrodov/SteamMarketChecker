@@ -18,6 +18,9 @@ public class Lot {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private Long listingId;
+    private Long assetId;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemId")
     private Item item;

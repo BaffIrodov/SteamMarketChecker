@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class SteamMarketCheckerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SteamMarketCheckerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SteamMarketCheckerApplication.class, args);
+    }
 }
