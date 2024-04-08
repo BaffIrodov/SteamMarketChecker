@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-public class LotDto {
+public class LotFromJsonDto {
     private Long listingId;
     private Double price; // цена - видимо, указывается автором в его валюте
     private Double fee; // комиссия
@@ -17,7 +17,7 @@ public class LotDto {
     private Long assetId;
     private String stickersAsString;
 
-    public LotDto(JsonElement jsonElementListingInfo) {
+    public LotFromJsonDto(JsonElement jsonElementListingInfo) {
         Map<String, JsonElement> mapListingInfo = jsonElementListingInfo.getAsJsonObject().asMap();
         this.listingId = mapListingInfo.get("listingid").getAsLong();
         this.price = mapListingInfo.get("price").getAsDouble();

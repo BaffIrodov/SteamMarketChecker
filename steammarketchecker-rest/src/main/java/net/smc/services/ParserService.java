@@ -4,11 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.smc.common.CommonUtils;
-import net.smc.dto.dtofromjson.LotDto;
-import net.smc.dto.dtofromjson.SteamItemDto;
+import net.smc.dto.dtofromjson.LotFromJsonDto;
+import net.smc.dto.dtofromjson.SteamItemFromJsonDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,19 +31,19 @@ public class ParserService {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject listingJson = gson.fromJson(listingJsonAsString, JsonObject.class);
-        List<LotDto> lotsWithStickers = new ArrayList<>();
+        List<LotFromJsonDto> lotsWithStickers = new ArrayList<>();
         if (listingJson != null && listingJson.asMap().get("success").getAsBoolean()) {
             Map<String, JsonElement> map = listingJson.asMap().get("listinginfo").getAsJsonObject().asMap();
             map.values().forEach(jsonElement -> {
-                LotDto lotDto = new LotDto(jsonElement);
+                LotFromJsonDto lotFromJsonDto = new LotFromJsonDto(jsonElement);
                 String assetDescriptions = listingJson.asMap().get("assets").getAsJsonObject().asMap()
                         .get("730").getAsJsonObject().asMap().get("2").getAsJsonObject().asMap()
-                        .get(lotDto.getAssetId().toString()).getAsJsonObject().asMap().get("descriptions").toString();
+                        .get(lotFromJsonDto.getAssetId().toString()).getAsJsonObject().asMap().get("descriptions").toString();
                 if (assetDescriptions.contains("Наклейка")) {
                     String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Наклейка).{10}", "")
                             .replaceAll("</center>.*", "");
-                    lotDto.setStickersAsString(stickersAsString);
-                    lotsWithStickers.add(lotDto);
+                    lotFromJsonDto.setStickersAsString(stickersAsString);
+                    lotsWithStickers.add(lotFromJsonDto);
                 }
             });
         }
@@ -64,7 +63,7 @@ public class ParserService {
         JsonObject priceOverviewJson = gson.fromJson(priceOverviewJsonAsString, JsonObject.class);
         if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()) {
             Map<String, JsonElement> map = priceOverviewJson.asMap();
-            SteamItemDto steamItemDto = new SteamItemDto(priceOverviewJson);
+            SteamItemFromJsonDto steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
         }
     }
 
