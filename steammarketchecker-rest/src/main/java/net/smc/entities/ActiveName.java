@@ -4,15 +4,18 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
-// таблица-справочник для скинов
+// таблица со списком itemName для парсинга
 @Entity
 @Data
 @NoArgsConstructor
-public class Item extends SteamItem {
+public class ActiveName {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    private String itemName;
+    private Integer parsePeriod; // in sec
+
 }

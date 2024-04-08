@@ -8,15 +8,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Sticker {
+public class Sticker extends SteamItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    private Long steamItemId;
-    private String name;
-    private Double price;
-
 }
