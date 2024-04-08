@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.smc.common.CommonUtils;
 import net.smc.dto.dtofromjson.LotFromJsonDto;
@@ -24,7 +25,7 @@ public class ParserService {
         int countAsInt = 10;
         String itemName = "StatTrak™ AWP | Fever Dream (Factory New)";
         String convertedItemName = commonUtils.defaultStringConverter(itemName);
-        String url = String.format("https://steamcommunity.com/market/listings/730/%s/render/?query=&count=%d&country=RU&language=russian&currency=5",
+        String url = String.format("https://steamcommunity.com/market/listings/730/%s/render/?query=&count=%d&country=UK&language=english&currency=5",
                 convertedItemName, countAsInt);
 
         String listingJsonAsString = commonUtils.connectAndGetJsonAsString(url);
@@ -39,8 +40,8 @@ public class ParserService {
                 String assetDescriptions = listingJson.asMap().get("assets").getAsJsonObject().asMap()
                         .get("730").getAsJsonObject().asMap().get("2").getAsJsonObject().asMap()
                         .get(lotFromJsonDto.getAssetId().toString()).getAsJsonObject().asMap().get("descriptions").toString();
-                if (assetDescriptions.contains("Наклейка")) {
-                    String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Наклейка).{10}", "")
+                if (assetDescriptions.contains("Sticker")) {
+                    String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Sticker).{9}", "")
                             .replaceAll("</center>.*", "");
                     lotFromJsonDto.setStickersAsString(stickersAsString);
                     lotsWithStickers.add(lotFromJsonDto);
