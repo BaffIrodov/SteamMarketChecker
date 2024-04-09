@@ -11,6 +11,8 @@ import { DefaultParent } from "../dto/DefaultParent";
 })
 export class DefaultParentService extends BaseService {
 
+  private path: string = "default-parent";
+
   constructor(private http: HttpClient,
               public router: Router,
               public override configService: ConfigService) {
@@ -19,7 +21,7 @@ export class DefaultParentService extends BaseService {
 
   async getAllDefaultParent(showArchive: boolean) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.get<DefaultParent[]>(url + "/default-parent/all", {
+    return await firstValueFrom(this.http.get<DefaultParent[]>(url + `/${this.path}/all`, {
       params: {
         showArchive: showArchive
       }
@@ -28,21 +30,21 @@ export class DefaultParentService extends BaseService {
 
   async getDefaultParent(id: number) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.get<DefaultParent>(url + `/default-parent/${id}`));
+    return await firstValueFrom(this.http.get<DefaultParent>(url + `/${this.path}/${id}`));
   }
 
-  async createDefaultParent(event: DefaultParent) {
+  async createDefaultParent(defaultParent: DefaultParent) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.post(url + "/default-parent/create", event));
+    return await firstValueFrom(this.http.post(url + `/${this.path}/create`, defaultParent));
   }
 
-  async updateDefaultParent(id: number, event: DefaultParent) {
+  async updateDefaultParent(id: number, defaultParent: DefaultParent) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.put(url + `/default-parent/${id}/update`, event));
+    return await firstValueFrom(this.http.put(url + `/${this.path}/${id}/update`, defaultParent));
   }
 
-  async archiveEvent(id: number) {
+  async archiveDefaultParent(id: number) {
     const url = await this.getBackendUrl();
-    await firstValueFrom(this.http.delete(url + `/default-parent/${id}/archive`));
+    await firstValueFrom(this.http.delete(url + `/${this.path}/${id}/archive`));
   }
 }

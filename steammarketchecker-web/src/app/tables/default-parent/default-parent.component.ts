@@ -142,7 +142,7 @@ export class DefaultParentComponent implements OnInit {
       message: 'Отправить позицию в архив?',
       accept: async () => {
         try {
-          await this.defaultParentService.archiveEvent(this.selectedDefaultParent.id);
+          await this.defaultParentService.archiveDefaultParent(this.selectedDefaultParent.id);
           this.messageService.add({
             severity: 'success',
             summary: 'Успех!',

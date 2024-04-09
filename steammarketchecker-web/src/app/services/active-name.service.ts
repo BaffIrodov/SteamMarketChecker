@@ -6,13 +6,14 @@ import { Router } from "@angular/router";
 import { ConfigService } from "../config/config.service";
 import { BaseService } from "./base.service";
 import { DefaultChild } from "../dto/DefaultChild";
+import { ActiveName } from "../dto/ActiveName";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DefaultChildService extends BaseService {
-
-  private path: string = "default-child";
+export class ActiveNameService extends BaseService {
+  
+  private path: string = "active-names";
 
   constructor(private http: HttpClient,
               public router: Router,
@@ -20,35 +21,26 @@ export class DefaultChildService extends BaseService {
     super(configService);
   }
 
-  async getAllDefaultChildren(showArchive: boolean) {
+  async getAllActiveNames(showArchive: boolean) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.get<DefaultParent[]>(url + `/${this.path}/all`, {
+    return await firstValueFrom(this.http.get<ActiveName[]>(url + `/${this.path}/all`, {
       params: {
         showArchive: showArchive
       }
     }));
   }
 
-  async getDefaultChildrenByDefaultParentId(id: number, showArchive: boolean) {
+  async createActiveName(activeName: ActiveName) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.get<DefaultChild[]>(url + `/${this.path}/${id}`, {
-      params: {
-        showArchive: showArchive
-      }
-    }));
+    return await firstValueFrom(this.http.post<ActiveName[]>(url + `/${this.path}/create`, activeName));
   }
 
-  async createDefaultChild(defaultChild: DefaultChild) {
+  async updateActiveName(id: number, activeName: ActiveName) {
     const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.post<DefaultChild[]>(url + `/${this.path}/create`, defaultChild));
+    return await firstValueFrom(this.http.put<ActiveName[]>(url + `/${this.path}/${id}/update`, activeName));
   }
 
-  async updateDefaultChild(id: number, defaultChild: DefaultChild) {
-    const url = await this.getBackendUrl();
-    return await firstValueFrom(this.http.put<DefaultChild[]>(url + `/${this.path}/${id}/update`, defaultChild));
-  }
-
-  async archiveDefaultChild(id: number) {
+  async archiveActiveName(id: number) {
     const url = await this.getBackendUrl();
     await firstValueFrom(this.http.delete(url + `/${this.path}/${id}/archive`));
   }

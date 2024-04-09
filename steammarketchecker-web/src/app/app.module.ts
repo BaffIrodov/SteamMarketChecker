@@ -56,6 +56,8 @@ import { MenubarModule } from "primeng/menubar";
 import { MenuModule } from "primeng/menu";
 import { DefaultParentComponent } from "./tables/default-parent/default-parent.component";
 import { DefaultChildComponent } from "./tables/default-child/default-child.component";
+import { ActiveNameComponent } from './tables/active-name/active-name.component';
+import { ActiveNameDialogComponent } from './dialogs/active-name-dialog/active-name-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import { DefaultChildComponent } from "./tables/default-child/default-child.comp
     UserDialogComponent,
     PasswordRecoverFormComponent,
     DefaultParentComponent,
-    DefaultChildComponent
+    DefaultChildComponent,
+    ActiveNameComponent,
+    ActiveNameDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -8,14 +8,16 @@ import { AnalyticsComponent } from "./tables/analytics/analytics.component";
 import {RegistrationFormComponent} from "./registration-form/registration-form.component";
 import {PasswordRecoverFormComponent} from "./password-recover-form/password-recover-form.component";
 import { DefaultParentComponent } from "./tables/default-parent/default-parent.component";
+import { ActiveNameComponent } from "./tables/active-name/active-name.component";
 
 const routes: Routes = [
     {path: '', component: NavigationComponent, canActivate: [AuthGuard]},
     {path: 'login', component: LoginFormComponent},
     {path: 'registration', component: RegistrationFormComponent},
     {path: 'password-recover', component: PasswordRecoverFormComponent},
-    {path: 'admin', component: AdminComponent,canActivate: [AuthGuard]},
-    {path: 'event', component: DefaultParentComponent,canActivate: [AuthGuard]},
+    {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+    {path: 'default-parent', component: DefaultParentComponent, canActivate: [AuthGuard]},
+    {path: 'active-name', component: ActiveNameComponent, canActivate: [AuthGuard]},
     {path: 'analytics', component: AnalyticsComponent}
 ];
 

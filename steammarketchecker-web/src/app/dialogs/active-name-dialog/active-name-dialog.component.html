@@ -1,0 +1,20 @@
+<app-dialog *ngIf="visible"
+            [visible]="visible"
+            [selectedItem]="item"
+            [title]="dialogTitle"
+            [editMode]="editMode"
+            (submit)="onSubmit($event)">
+
+  <app-dialog-row [(item)]="item.itemName"
+                  icon = 'pi pi-user'
+                  title="Название позиции для парсинга"
+                  type="string"></app-dialog-row>
+
+  <app-dialog-row [(item)]="item.parsePeriod"
+                  icon = 'pi pi-user'
+                  title="Период парсинга (в секундах)"
+                  type="number"></app-dialog-row>
+
+<!--  Остальные поля не нужно заполнять никогда  -->
+
+</app-dialog>
