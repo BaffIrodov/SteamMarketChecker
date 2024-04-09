@@ -22,20 +22,26 @@ public class ActiveNameController {
 
     @PostMapping("create")
     @Transactional
-    public List<ActiveNameDto> createDefaultChild(@RequestBody ActiveNameDto activeNameDto) {
+    public List<ActiveNameDto> createActiveName(@RequestBody ActiveNameDto activeNameDto) {
         return this.activeNameService.createActiveName(activeNameDto);
     }
 
     @PutMapping("{id}/update")
     @Transactional
-    public List<ActiveNameDto> updateDefaultChild(@PathVariable Long id, @RequestBody ActiveNameDto activeNameDto) {
+    public List<ActiveNameDto> updateActiveName(@PathVariable Long id, @RequestBody ActiveNameDto activeNameDto) {
         return this.activeNameService.updateActiveName(id, activeNameDto);
     }
 
     @DeleteMapping("{id}/archive")
     @Transactional
-    public void archiveDefaultChild(@PathVariable Long id) {
+    public void archiveActiveName(@PathVariable Long id) {
         this.activeNameService.archiveActiveName(id);
+    }
+
+    @GetMapping("{id}/force-update")
+    @Transactional
+    public void forceUpdateActiveName(@PathVariable Long id) {
+        this.activeNameService.forceUpdateActiveName(id);
     }
 
 }

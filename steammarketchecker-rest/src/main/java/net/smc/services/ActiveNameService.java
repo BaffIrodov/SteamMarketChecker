@@ -8,7 +8,6 @@ import net.smc.readers.ActiveNameReader;
 import net.smc.repositories.ActiveNameRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,8 +28,9 @@ public class ActiveNameService {
         for (ActiveName activeName : allActiveNames) {
             long now = Instant.now().getEpochSecond();
             long parseDate = Optional.ofNullable(activeName.getLastParseDate()).orElse(Instant.MIN).getEpochSecond();
-            if (now - parseDate > activeName.getParsePeriod()) {
+            if (now - parseDate > activeName.getParsePeriod() || activeName.isForceUpdate()) {
                 activeName.setLastParseDate(Instant.now());
+                activeName.setForceUpdate(false);
             }
         }
         activeNameRepository.saveAll(allActiveNames);
@@ -58,15 +58,24 @@ public class ActiveNameService {
         return activeNameReader.getActiveNameByIds(List.of(activeName.getId()));
     }
 
-    @DeleteMapping("{id}/archive")
     @Transactional
     public void archiveActiveName(@PathVariable Long id) {
         ActiveName activeName = this.activeNameRepository.findById(id).orElseThrow(
                 () -> {
-                    throw new RuntimeException("Дефолт-ребенок не найден!");
+                    throw new RuntimeException("Активная парсинг позиция не найдена!");
                 }
         );
-        activeName.archive();
+        activeName.archiveOrUnarchive();
+    }
+
+    @Transactional
+    public void forceUpdateActiveName(@PathVariable Long id) {
+        ActiveName activeName = this.activeNameRepository.findById(id).orElseThrow(
+                () -> {
+                    throw new RuntimeException("Активная парсинг позиция не найдена!");
+                }
+        );
+        activeName.forceUpdate();
     }
 
 }

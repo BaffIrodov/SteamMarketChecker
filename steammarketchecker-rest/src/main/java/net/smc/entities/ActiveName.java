@@ -20,27 +20,37 @@ public class ActiveName {
     private Long id;
 
     private String itemName;
+    private Integer parseItemCount;
     private Integer parsePeriod; // in sec
     private Instant lastParseDate;
     private boolean archive;
+    private boolean forceUpdate;
 
     public ActiveName(ActiveNameDto activeNameDto) {
         this.id = activeNameDto.getId();
         this.itemName = activeNameDto.getItemName();
+        this.parseItemCount = activeNameDto.getParseItemCount();
         this.parsePeriod = activeNameDto.getParsePeriod();
         this.lastParseDate = activeNameDto.getLastParseDate();
         this.archive = activeNameDto.isArchive();
+        this.forceUpdate = activeNameDto.isForceUpdate();
     }
 
     public void update(ActiveNameDto activeNameDto) {
         this.itemName = activeNameDto.getItemName();
+        this.parseItemCount = activeNameDto.getParseItemCount();
         this.parsePeriod = activeNameDto.getParsePeriod();
         this.lastParseDate = activeNameDto.getLastParseDate();
         this.archive = activeNameDto.isArchive();
+        this.forceUpdate = activeNameDto.isForceUpdate();
     }
 
-    public void archive() {
-        this.archive = true;
+    public void archiveOrUnarchive() {
+        this.archive = !this.archive;
+    }
+
+    public void forceUpdate() {
+        this.forceUpdate = true;
     }
 
 }

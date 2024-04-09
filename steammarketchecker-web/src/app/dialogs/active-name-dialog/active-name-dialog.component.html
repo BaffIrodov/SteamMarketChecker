@@ -10,6 +10,11 @@
                   title="Название позиции для парсинга"
                   type="string"></app-dialog-row>
 
+  <app-dialog-row [(item)]="item.parseItemCount"
+                  icon = 'pi pi-user'
+                  title="Количество айтемов для парсинга"
+                  type="number"></app-dialog-row>
+
   <app-dialog-row [(item)]="item.parsePeriod"
                   icon = 'pi pi-user'
                   title="Период парсинга (в секундах)"

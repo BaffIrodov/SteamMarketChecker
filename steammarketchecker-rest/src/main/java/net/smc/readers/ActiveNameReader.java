@@ -22,8 +22,11 @@ public class ActiveNameReader {
                 ActiveNameDto.class,
                 qActiveName.id,
                 qActiveName.itemName,
+                qActiveName.parseItemCount,
                 qActiveName.parsePeriod,
-                qActiveName.lastParseDate
+                qActiveName.lastParseDate,
+                qActiveName.archive,
+                qActiveName.forceUpdate
         );
     }
 

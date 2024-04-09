@@ -2,7 +2,7 @@
   <div class="table-name">Позиции для парсинга</div>
 
   <p-button
-    label="Обновить"
+    label="Обновить таблицу"
     icon="pi pi-sync"
     styleClass="p-button-rounded p-button-warning p-button-outlined"
     (click)="getAllActiveNames()"
@@ -26,11 +26,17 @@
             [disabled]="!selectedActiveName"
             (onClick)="updateActiveName()"
   ></p-button>
-  <p-button label="Удалить"
+  <p-button [label]="this.selectedActiveName?.archive ? 'Вернуть из архива' : 'Отправить в архив'"
             icon="pi pi-trash"
-            styleClass="p-button-outlined p-button-danger"
+            [styleClass]="this.selectedActiveName?.archive ? 'p-button-outlined p-button-help' : 'p-button-outlined p-button-danger'"
             [disabled]="!selectedActiveName"
-            (onClick)="archiveRequest()"
+            (onClick)="archiveActiveName()"
+  ></p-button>
+  <p-button label="Принудительно апдейтнуть"
+            icon="pi pi-sync"
+            styleClass="p-button-outlined p-button-outlined"
+            [disabled]="!selectedActiveName"
+            (onClick)="forceUpdateActiveName()"
   ></p-button>
 
   <p-checkbox
@@ -44,6 +50,7 @@
 </p-toolbar>
 
 <ag-grid-angular
+  #activeNameTable
   style="width: 100%; height: 100%"
   class="ag-theme-alpine"
   [columnDefs]="columnDefs"

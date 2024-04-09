@@ -44,4 +44,9 @@ export class ActiveNameService extends BaseService {
     const url = await this.getBackendUrl();
     await firstValueFrom(this.http.delete(url + `/${this.path}/${id}/archive`));
   }
+
+  async forceUpdateActiveName(id: number) {
+    const url = await this.getBackendUrl();
+    await firstValueFrom(this.http.get(url + `/${this.path}/${id}/force-update`));
+  }
 }

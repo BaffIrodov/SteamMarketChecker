@@ -26,6 +26,7 @@ export class ActiveNameComponent {
   public columnDefs: ColDef[] = [
     { field: "id", headerName: "Идентификатор" },
     { field: "itemName", headerName: "Название" },
+    { field: "parseItemCount", headerName: "Количество айтемов для парсинга" },
     { field: "parsePeriod", headerName: "Период парсинга" },
     {
       field: "lastParseDate",
@@ -33,6 +34,11 @@ export class ActiveNameComponent {
       hide: this.showArchive,
       cellRenderer: (data: { value: number }) => {
         return data.value ? (new Date(data.value * 1000)).toLocaleString() : "";
+      }
+    },
+    {
+      field: "forceUpdate", headerName: "Принудительный апдейт", cellRenderer: (params: { forceUpdate: any; }) => {
+        return `<input disabled="true" type="checkbox" checked />`;
       }
     },
     {
@@ -63,6 +69,7 @@ export class ActiveNameComponent {
 
   isProductionPlanMode = false;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
+  @ViewChild('activeNameTable') activeNameTable: AgGridAngular;
   public overlayLoadingTemplate =
     "<span class=\"ag-overlay-loading-center\">Загрузка...</span>";
 
@@ -129,16 +136,48 @@ export class ActiveNameComponent {
     }
   }
 
-  archiveRequest() {
+  archiveActiveName() {
+    const archiveMessage = this.selectedActiveName.archive ? "Вернуть позицию из архива?" : "Отправить позицию в архив?";
+    const successDetail = this.selectedActiveName.archive ? "Позиция переведена из архива" : "Позиция переведена в архив";
     this.confirmationService.confirm({
-      message: "Отправить позицию в архив?",
+      message: archiveMessage,
       accept: async () => {
         try {
           await this.activeNameService.archiveActiveName(this.selectedActiveName.id);
           this.messageService.add({
             severity: "success",
             summary: "Успех!",
-            detail: "Позиция переведена в архив",
+            detail: successDetail,
+            life: 5000
+          });
+          await this.getAllActiveNames();
+        } catch (e: any) {
+          this.messageService.add({
+            severity: "error",
+            summary: "Ошибка...",
+            detail: e.error.message,
+            life: 5000
+          });
+        }
+      },
+      reject: () => {
+        // can implement on cancel
+      }
+    });
+  }
+
+  forceUpdateActiveName() {
+    const archiveMessage = "Апдейтнуть позицию?";
+    const successDetail = "Позиция будет апдейтнута";
+    this.confirmationService.confirm({
+      message: archiveMessage,
+      accept: async () => {
+        try {
+          await this.activeNameService.forceUpdateActiveName(this.selectedActiveName.id);
+          this.messageService.add({
+            severity: "success",
+            summary: "Успех!",
+            detail: successDetail,
             life: 5000
           });
           await this.getAllActiveNames();
