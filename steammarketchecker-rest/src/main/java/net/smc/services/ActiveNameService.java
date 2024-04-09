@@ -77,5 +77,4 @@ public class ActiveNameService {
         );
         activeName.forceUpdate();
     }
-
 }

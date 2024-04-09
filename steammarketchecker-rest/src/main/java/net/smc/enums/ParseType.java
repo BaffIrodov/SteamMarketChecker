@@ -1,5 +1,5 @@
 package net.smc.enums;
 
-public enum ParseTypeEnum {
+public enum ParseType {
     ITEM, STICKER, LOT
 }

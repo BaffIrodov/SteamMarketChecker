@@ -3,7 +3,7 @@ package net.smc.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.smc.enums.ParseTypeEnum;
+import net.smc.enums.ParseType;
 
 // таблица очереди парсинга
 @Entity
@@ -19,7 +19,7 @@ public class ParseQueue {
     private Integer importance;
 
     @Enumerated(EnumType.STRING)
-    private ParseTypeEnum parseType;
+    private ParseType parseType;
 
     private String parseTarget;
     private String parseUrl;

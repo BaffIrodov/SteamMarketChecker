@@ -58,6 +58,7 @@ import { DefaultParentComponent } from "./tables/default-parent/default-parent.c
 import { DefaultChildComponent } from "./tables/default-child/default-child.component";
 import { ActiveNameComponent } from './tables/active-name/active-name.component';
 import { ActiveNameDialogComponent } from './dialogs/active-name-dialog/active-name-dialog.component';
+import { SteamItemComponent } from './tables/steam-item/steam-item.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { ActiveNameDialogComponent } from './dialogs/active-name-dialog/active-n
     DefaultParentComponent,
     DefaultChildComponent,
     ActiveNameComponent,
-    ActiveNameDialogComponent
+    ActiveNameDialogComponent,
+    SteamItemComponent
   ],
   imports: [
     BrowserModule,

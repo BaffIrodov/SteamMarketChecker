@@ -24,7 +24,7 @@ public class Lot {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemId")
-    private Item item;
+    private SteamItem steamItem;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "lot_id")

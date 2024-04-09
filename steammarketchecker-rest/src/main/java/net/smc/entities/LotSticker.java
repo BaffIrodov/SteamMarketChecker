@@ -20,6 +20,6 @@ public class LotSticker {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stickerId")
-    private Sticker sticker;
+    private SteamItem steamSticker;
 
 }

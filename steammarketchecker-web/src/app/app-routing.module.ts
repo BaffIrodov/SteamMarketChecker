@@ -9,6 +9,7 @@ import {RegistrationFormComponent} from "./registration-form/registration-form.c
 import {PasswordRecoverFormComponent} from "./password-recover-form/password-recover-form.component";
 import { DefaultParentComponent } from "./tables/default-parent/default-parent.component";
 import { ActiveNameComponent } from "./tables/active-name/active-name.component";
+import { SteamItemComponent } from "./tables/steam-item/steam-item.component";
 
 const routes: Routes = [
     {path: '', component: NavigationComponent, canActivate: [AuthGuard]},
@@ -18,6 +19,7 @@ const routes: Routes = [
     {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
     {path: 'default-parent', component: DefaultParentComponent, canActivate: [AuthGuard]},
     {path: 'active-name', component: ActiveNameComponent, canActivate: [AuthGuard]},
+    {path: 'steam-item', component: SteamItemComponent, canActivate: [AuthGuard]},
     {path: 'analytics', component: AnalyticsComponent}
 ];
 
