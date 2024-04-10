@@ -30,7 +30,7 @@ export class DefaultParentComponent implements OnInit {
     //     return data.value ? (new Date(data.value)).toLocaleDateString() : '';
     //   }},
     {field: 'archive', headerName: 'Архив', hide: !this.showArchive, cellRenderer: (params: { archive: any; }) => {
-        return `<input disabled="true" type='checkbox' checked />`;
+        return params.archive ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
       } }
   ];
 

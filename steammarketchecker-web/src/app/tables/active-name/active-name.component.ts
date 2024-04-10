@@ -37,12 +37,12 @@ export class ActiveNameComponent {
     },
     {
       field: "forceUpdate", headerName: "Принудительный апдейт", cellRenderer: (params: { forceUpdate: any; }) => {
-        return `<input disabled="true" type="checkbox" checked />`;
+        return params.forceUpdate ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
       }
     },
     {
       field: "archive", headerName: "Архив", hide: !this.showArchive, cellRenderer: (params: { archive: any; }) => {
-        return `<input disabled="true" type="checkbox" checked />`;
+        return params.archive ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
       }
     }
   ];

@@ -22,4 +22,9 @@ public class LotSticker {
     @JoinColumn(name = "stickerId")
     private SteamItem steamSticker;
 
+    public LotSticker(Long lotId, SteamItem steamSticker) {
+        this.lotId = lotId;
+        this.steamSticker = steamSticker;
+    }
+
 }

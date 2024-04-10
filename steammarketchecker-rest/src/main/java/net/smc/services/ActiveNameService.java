@@ -6,6 +6,7 @@ import net.smc.dto.ActiveNameDto;
 import net.smc.entities.ActiveName;
 import net.smc.readers.ActiveNameReader;
 import net.smc.repositories.ActiveNameRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public class ActiveNameService {
     private final ActiveNameReader activeNameReader;
     private final ActiveNameRepository activeNameRepository;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
     public void parseActiveNamesByPeriod() {
         List<ActiveName> allActiveNames = activeNameRepository.findAll();
         for (ActiveName activeName : allActiveNames) {

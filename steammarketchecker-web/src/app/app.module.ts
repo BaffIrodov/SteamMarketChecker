@@ -59,6 +59,8 @@ import { DefaultChildComponent } from "./tables/default-child/default-child.comp
 import { ActiveNameComponent } from './tables/active-name/active-name.component';
 import { ActiveNameDialogComponent } from './dialogs/active-name-dialog/active-name-dialog.component';
 import { SteamItemComponent } from './tables/steam-item/steam-item.component';
+import { LotComponent } from './tables/lot/lot.component';
+import { ParseQueueComponent } from './tables/parse-queue/parse-queue.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,9 @@ import { SteamItemComponent } from './tables/steam-item/steam-item.component';
     DefaultChildComponent,
     ActiveNameComponent,
     ActiveNameDialogComponent,
-    SteamItemComponent
+    SteamItemComponent,
+    LotComponent,
+    ParseQueueComponent
   ],
   imports: [
     BrowserModule,

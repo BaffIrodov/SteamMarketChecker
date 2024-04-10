@@ -41,6 +41,14 @@ public class SteamItem {
         this.steamItemType = steamItemDto.getSteamItemType();
     }
 
+    public SteamItem(String name, Double minPrice, Double medianPrice, SteamItemType steamItemType) {
+        this.name = name;
+        this.minPrice = minPrice;
+        this.medianPrice = medianPrice;
+        this.parseDate = Instant.now();
+        this.steamItemType = steamItemType;
+    }
+
     public void forceUpdate() {
         this.forceUpdate = true;
     }

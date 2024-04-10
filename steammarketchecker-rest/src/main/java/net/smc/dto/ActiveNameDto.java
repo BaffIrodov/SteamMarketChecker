@@ -1,5 +1,6 @@
 package net.smc.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.smc.entities.ActiveName;
@@ -9,6 +10,7 @@ import java.time.Instant;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ActiveNameDto {
     private Long id;
     private String itemName;

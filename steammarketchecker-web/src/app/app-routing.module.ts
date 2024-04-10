@@ -10,6 +10,8 @@ import {PasswordRecoverFormComponent} from "./password-recover-form/password-rec
 import { DefaultParentComponent } from "./tables/default-parent/default-parent.component";
 import { ActiveNameComponent } from "./tables/active-name/active-name.component";
 import { SteamItemComponent } from "./tables/steam-item/steam-item.component";
+import { LotComponent } from "./tables/lot/lot.component";
+import { ParseQueueComponent } from "./tables/parse-queue/parse-queue.component";
 
 const routes: Routes = [
     {path: '', component: NavigationComponent, canActivate: [AuthGuard]},
@@ -20,6 +22,8 @@ const routes: Routes = [
     {path: 'default-parent', component: DefaultParentComponent, canActivate: [AuthGuard]},
     {path: 'active-name', component: ActiveNameComponent, canActivate: [AuthGuard]},
     {path: 'steam-item', component: SteamItemComponent, canActivate: [AuthGuard]},
+    {path: 'lot', component: LotComponent, canActivate: [AuthGuard]},
+    {path: 'parse-queue', component: ParseQueueComponent, canActivate: [AuthGuard]},
     {path: 'analytics', component: AnalyticsComponent}
 ];
 

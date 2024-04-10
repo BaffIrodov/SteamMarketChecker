@@ -7,6 +7,8 @@ token:
   recover-clean-in-sec: "3600"
 scheduled:
   default: "25000"
+  active-name: "1000"
+  parse-queue: "1000"
 initialize:
   admin: true
   user: true
@@ -16,6 +18,13 @@ default-user:
   email: "admin-user-42-user-admin@gmail.com"
   full-name: "Админ Админович Админов"
 generators:
-  default-parent: false
-  default-child: false
   message: false
+  active-name: true
+  parse-queue: true
+  lot-with-steam-items: true
+truncate-table:
+  active-name: true
+  parse-queue: true
+  lot: true
+  lot-sticker: true
+  steam-item: true

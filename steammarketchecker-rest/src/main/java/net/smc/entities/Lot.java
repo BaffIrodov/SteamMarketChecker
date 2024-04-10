@@ -30,8 +30,9 @@ public class Lot {
     @JoinColumn(name = "lot_id")
     private List<LotSticker> lotStickerList = new ArrayList<>();
 
-    private Boolean completeness;
-    private Boolean profitability;
+    private boolean completeness;
+    private boolean profitability;
+    private boolean actual;
     private Double profit;
     private Double convertedPrice; // цена - нормированная
     private Double convertedFee; // комиссия - нормированная
@@ -39,5 +40,15 @@ public class Lot {
     private Instant priceCalculatingDate;
     private Instant parseDate;
     private String stickersAsString;
+
+    public Lot(Double profit, Double convertedPrice, Double convertedFee, Double realPrice) {
+        this.profit = profit;
+        this.convertedPrice = convertedPrice;
+        this.convertedFee = convertedFee;
+        this.realPrice = realPrice;
+        this.priceCalculatingDate = Instant.now();
+    }
+
+    // конструктор на основе дто тут не нужен - эта сущность никогда не создается из дто
 
 }

@@ -1,0 +1,47 @@
+<p-toolbar>
+  <div class="table-name">Очередь парсинга</div>
+
+  <p-button
+    label="Обновить таблицу"
+    icon="pi pi-sync"
+    styleClass="p-button-rounded p-button-warning p-button-outlined"
+    (click)="getAllParseQueues()"
+  ></p-button>
+
+  <p-button
+    label="Открыть фильтры"
+    icon="pi pi-filter"
+    styleClass="p-button-outlined p-button-warning"
+    (onClick)="showFilter()"
+  ></p-button>
+
+  <p-checkbox
+    label="Показать только архивные"
+    inputId="binary"
+    [binary]="true"
+    [(ngModel)]="showArchive"
+    (ngModelChange)="checkboxPressed()"
+  ></p-checkbox>
+
+</p-toolbar>
+
+<ag-grid-angular
+  #activeNameTable
+  style="width: 100%; height: 100%"
+  class="ag-theme-alpine"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [rowData]="rowData"
+  [overlayLoadingTemplate]="overlayLoadingTemplate"
+  [loadingCellRenderer]="loadingCellRenderer"
+  [loadingCellRendererParams]="loadingCellRendererParams"
+  [overlayNoRowsTemplate]="'Данные отсутствуют'"
+  [rowSelection]="'single'"
+  [animateRows]="true"
+  (gridReady)="onGridReady($event)"
+  (cellClicked)="onCellClicked($event)"
+></ag-grid-angular>
+
+<ng-container *ngIf="loading">
+  <div *ngIf="loading" class="loading">Загрузка...</div>
+</ng-container>

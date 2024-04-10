@@ -35,7 +35,7 @@ export class SteamItemComponent {
     },
     {
       field: "forceUpdate", headerName: "Принудительный апдейт", cellRenderer: (params: { forceUpdate: any; }) => {
-        return `<input disabled="true" type="checkbox" checked />`;
+        return params.forceUpdate ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
       }
     },
     { field: "steamItemType", headerName: "Тип айтема" },

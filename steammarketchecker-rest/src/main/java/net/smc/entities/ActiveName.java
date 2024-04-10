@@ -36,6 +36,12 @@ public class ActiveName {
         this.forceUpdate = activeNameDto.isForceUpdate();
     }
 
+    public ActiveName(String itemName, Integer parseItemCount, Integer parsePeriod) {
+        this.itemName = itemName;
+        this.parseItemCount = parseItemCount;
+        this.parsePeriod = parsePeriod;
+    }
+
     public void update(ActiveNameDto activeNameDto) {
         this.itemName = activeNameDto.getItemName();
         this.parseItemCount = activeNameDto.getParseItemCount();
