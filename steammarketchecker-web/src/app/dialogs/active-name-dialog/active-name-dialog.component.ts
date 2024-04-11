@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { DefaultChildService } from "../../services/default-child.service";
 import { MessageService } from "primeng/api";
 import { ActiveNameService } from "../../services/active-name.service";
 import { ActiveName } from "../../dto/ActiveName";
@@ -15,12 +14,9 @@ export class ActiveNameDialogComponent {
   @Input("item") item: ActiveName = new ActiveName();
   @Input("editMode") editMode: boolean;
   @Output() submit = new EventEmitter<any>();
-  @Output() visibleChange = new EventEmitter<any>();
-  dialogTitle = "Регистрация ребенка";
-  products: any[] = [];
+  dialogTitle = "";
 
-  constructor(private defaultChildService: DefaultChildService,
-              private activeNameService: ActiveNameService,
+  constructor(private activeNameService: ActiveNameService,
               public messageService: MessageService) {
   }
 

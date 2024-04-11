@@ -61,6 +61,7 @@ import { ActiveNameDialogComponent } from './dialogs/active-name-dialog/active-n
 import { SteamItemComponent } from './tables/steam-item/steam-item.component';
 import { LotComponent } from './tables/lot/lot.component';
 import { ParseQueueComponent } from './tables/parse-queue/parse-queue.component';
+import { LotDetailingDialogComponent } from './dialogs/lot-detailing-dialog/lot-detailing-dialog.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { ParseQueueComponent } from './tables/parse-queue/parse-queue.component'
     ActiveNameDialogComponent,
     SteamItemComponent,
     LotComponent,
-    ParseQueueComponent
+    ParseQueueComponent,
+    LotDetailingDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
-import { SteamItem, SteamItemType } from "../../dto/SteamItem";
 import { CellClickedEvent, ColDef, ValueGetterParams } from "ag-grid-community";
 import { LoadingCellRendererComponent } from "../../platform/loading-cell-renderer/loading-cell-renderer.component";
 import { AgGridAngular } from "ag-grid-angular";
-import { SteamItemService } from "../../services/steam-item.service";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { ConfirmationService, MessageService } from "primeng/api";
@@ -11,9 +9,9 @@ import { Lot } from "../../dto/Lot";
 import { LotService } from "../../services/lot.service";
 
 @Component({
-  selector: 'app-lot',
-  templateUrl: './lot.component.html',
-  styleUrls: ['./lot.component.scss']
+  selector: "app-lot",
+  templateUrl: "./lot.component.html",
+  styleUrls: ["./lot.component.scss"]
 })
 export class LotComponent {
   selectedLot: Lot;
@@ -23,29 +21,32 @@ export class LotComponent {
   showOnlyActual: boolean = false;
   showOnlyCompleteness: boolean = false;
   showOnlyProfitability: boolean = false;
+  openDialog: boolean = false;
 
   getProfitPercent(): (params: ValueGetterParams) => string {
     return (params: ValueGetterParams): string => {
       return (params?.data?.profit / params?.data?.realPrice).toString();
-    }
+    };
   }
 
   public columnDefs: ColDef[] = [
     { field: "id", headerName: "Идентификатор" },
     { field: "skin.name", headerName: "Название айтема" },
     {
-      field: "completeness", headerName: "Все составляющие с актуальной ценой", cellRenderer: (params: { completeness: any; }) => {
-        return params.completeness ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
+      field: "completeness",
+      headerName: "Все составляющие с актуальной ценой",
+      cellRenderer: (params: { completeness: any; }) => {
+        return params.completeness ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
     {
       field: "profitability", headerName: "Выгодная покупка", cellRenderer: (params: { profitability: any; }) => {
-        return params.profitability ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
+        return params.profitability ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
     {
       field: "actual", headerName: "Актуально", cellRenderer: (params: { actual: any; }) => {
-        return params.actual ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`
+        return params.actual ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
     { field: "profit", headerName: "Чистый профит" },
@@ -66,7 +67,7 @@ export class LotComponent {
         return data.value ? (new Date(data.value * 1000)).toLocaleString() : "";
       }
     },
-    { field: "stickersAsString", headerName: "Стикеры в виде строки" },
+    { field: "stickersAsString", headerName: "Стикеры в виде строки" }
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -136,7 +137,18 @@ export class LotComponent {
     this.agGrid.api.deselectAll();
   }
 
+  getLabelForDetailButton(): string {
+    if (this.selectedLot && this.selectedLot?.stickers) {
+      return 'Подробности (стикеров: ' + this.selectedLot?.stickers?.length + ')';
+    }
+    return 'Подробности';
+  }
+
   async checkboxPressed() {
     await this.getAllLots();
+  }
+
+  async onDialogSubmit($event: any) {
+    this.openDialog = false;
   }
 }

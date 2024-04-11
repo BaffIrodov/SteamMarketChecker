@@ -2,6 +2,7 @@ package net.smc.generators;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.smc.entities.*;
 import net.smc.enums.ParseType;
 import net.smc.enums.SteamItemType;
@@ -15,6 +16,7 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class DataGenerator {
 
     private final DefaultParentRepository defaultParentRepository;
@@ -67,6 +69,7 @@ public class DataGenerator {
 
     public void generateActiveNames() {
         if (generatorActiveNameEnable && activeNameRepository.findAll().size() == 0) {
+            log.warn("ActiveName tables filled");
             for (int i = 0; i < activeNameCount; i++) {
                 activeNameRepository.save(
                         new ActiveName("generatedName_" + (i + 1), (i+1)*10, (i+5)*10)
@@ -77,6 +80,7 @@ public class DataGenerator {
 
     public void generateParseQueues() {
         if (generatorParseQueueEnable && parseQueueRepository.findAll().size() == 0) {
+            log.warn("ParseQueue tables filled");
             for (int i = 0; i < parseQueueCount; i++) {
                 parseQueueRepository.save(new ParseQueue(i, ParseType.LOT, "generatedParseTarget_" + (i + 1), "generatedParseUrl_" + (i + 1)));
                 parseQueueRepository.save(new ParseQueue(i, ParseType.SKIN, "generatedParseTarget_" + (i + 1), "generatedParseUrl_" + (i + 1)));
@@ -89,6 +93,7 @@ public class DataGenerator {
         Random random = new Random();
         if (generatorLotWithSteamItemsEnable && lotRepository.findAll().size() == 0
                 && lotStickerRepository.findAll().size() == 0 && steamItemRepository.findAll().size() == 0) {
+            log.warn("Lot, LotSticker, SteamItem tables filled");
             List<Lot> lotList = new ArrayList<>();
             List<SteamItem> skinList = new ArrayList<>();
             List<SteamItem> stickerList = new ArrayList<>();
@@ -107,9 +112,9 @@ public class DataGenerator {
             for (Lot lot : lotList) {
                 List<LotSticker> lotStickerList = new ArrayList<>();
                 int randStickerCount = random.nextInt(1, 4);
-                int randStickerIndex = random.nextInt(0, stickerCount-1);
                 int randSkinIndex = random.nextInt(0, skinCount-1);
                 for (int i = 0; i < randStickerCount; i++) {
+                    int randStickerIndex = random.nextInt(0, stickerCount-1);
                     lotStickerList.add(new LotSticker(lot.getId(), stickerList.get(randStickerIndex)));
                 }
                 lot.setSteamItem(skinList.get(randSkinIndex));
@@ -121,10 +126,25 @@ public class DataGenerator {
     }
 
     public void truncateTables() {
-        if (truncateActiveNameTable) activeNameRepository.deleteAll();
-        if (truncateParseQueueTable) parseQueueRepository.deleteAll();
-        if (truncateLotTable) lotRepository.deleteAll();
-        if (truncateLotStickerTable) lotStickerRepository.deleteAll();
-        if (truncateSteamItemTable) steamItemRepository.deleteAll();
+        if (truncateActiveNameTable) {
+            log.warn("ActiveNameTable truncated");
+            activeNameRepository.deleteAll();
+        }
+        if (truncateParseQueueTable) {
+            log.warn("ParseQueueTable truncated");
+            parseQueueRepository.deleteAll();
+        }
+        if (truncateLotTable) {
+            log.warn("LotTable truncated");
+            lotRepository.deleteAll();
+        }
+        if (truncateLotStickerTable) {
+            log.warn("LotStickerTable truncated");
+            lotStickerRepository.deleteAll();
+        }
+        if (truncateSteamItemTable) {
+            log.warn("SteamItemTable truncated");
+            steamItemRepository.deleteAll();
+        }
     }
 }

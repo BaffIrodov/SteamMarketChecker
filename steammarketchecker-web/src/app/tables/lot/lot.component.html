@@ -15,6 +15,12 @@
     (onClick)="showFilter()"
   ></p-button>
 
+  <p-button
+    [label]="getLabelForDetailButton()"
+    styleClass="p-button-outlined p-button-warning"
+    (onClick)="this.openDialog = true;"
+  ></p-button>
+
   <p-checkbox
     label="Показать только актуальные"
     inputId="binary"
@@ -61,3 +67,9 @@
 <ng-container *ngIf="loading">
   <div *ngIf="loading" class="loading">Загрузка...</div>
 </ng-container>
+
+<app-lot-detailing-dialog [openDialog]="openDialog"
+                          *ngIf="openDialog"
+                          [lot]="selectedLot"
+                          (submit)="onDialogSubmit($event)"
+></app-lot-detailing-dialog>

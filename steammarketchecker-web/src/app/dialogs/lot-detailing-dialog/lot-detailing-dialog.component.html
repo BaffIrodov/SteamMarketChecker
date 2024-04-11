@@ -1,0 +1,28 @@
+<app-dialog *ngIf="visible"
+            [visible]="visible"
+            [selectedItem]="lot"
+            [title]="dialogTitle"
+            (submit)="onSubmit($event)"
+>
+  <div>
+    <b>Skin</b>
+    <app-dialog-row [(item)]="'Название скина:\n' + lot.skin.name"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+
+    <app-dialog-row [(item)]="'Минимальная цена скина:\n' + lot.skin.minPrice"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+  </div>
+
+  <div *ngFor="let sticker of lot.stickers; let idx = index;">
+    <b>Sticker</b>
+    <app-dialog-row [(item)]="'Название стикера (номер ' + idx + '):\n' + lot.stickers[idx].name"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+
+    <app-dialog-row [(item)]="'Минимальная цена стикера (номер ' + idx + '):\n' + lot.stickers[idx].minPrice"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+  </div>
+</app-dialog>
