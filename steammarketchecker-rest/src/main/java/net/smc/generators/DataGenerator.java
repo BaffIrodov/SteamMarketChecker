@@ -72,7 +72,7 @@ public class DataGenerator {
             log.warn("ActiveName tables filled");
             for (int i = 0; i < activeNameCount; i++) {
                 activeNameRepository.save(
-                        new ActiveName("generatedName_" + (i + 1), (i+1)*10, (i+5)*10)
+                        new ActiveName("generatedName_" + (i + 1), (i+1)*10, (i+1)*10)
                 );
             }
         }

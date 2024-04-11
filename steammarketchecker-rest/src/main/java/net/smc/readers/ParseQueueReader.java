@@ -1,14 +1,18 @@
 package net.smc.readers;
 
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.QBean;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import net.smc.dto.ParseQueueDto;
+import net.smc.entities.ParseQueue;
 import net.smc.entities.QParseQueue;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,5 +44,12 @@ public class ParseQueueReader {
                 .select(getMappedSelectForParseQueueDto())
                 .where(qParseQueue.id.in(ids))
                 .fetch();
+    }
+
+    public Map<String, ParseQueueDto> getMapQueueByTarget(List<String> parseTargets, boolean archive) {
+        return queryFactory.from(qParseQueue)
+                .where(qParseQueue.archive.eq(archive).and(qParseQueue.parseTarget.in(parseTargets)))
+                .select(getMappedSelectForParseQueueDto())
+                .fetch().stream().collect(Collectors.toMap(ParseQueueDto::getParseTarget, e -> e));
     }
 }
