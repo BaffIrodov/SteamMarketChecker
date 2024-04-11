@@ -13,6 +13,7 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name"}) })
 public class SteamItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

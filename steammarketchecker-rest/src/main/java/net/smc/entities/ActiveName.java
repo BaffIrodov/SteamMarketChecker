@@ -12,6 +12,7 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "itemName"}) })
 public class ActiveName {
 
     @Id
