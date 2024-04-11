@@ -5,6 +5,7 @@ export class ParseQueue {
   parseTarget: string;
   parseUrl: string;
   archive: boolean;
+  attempt: number;
 
   constructor() {
   }

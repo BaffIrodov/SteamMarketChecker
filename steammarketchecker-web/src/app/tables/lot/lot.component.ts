@@ -22,6 +22,7 @@ export class LotComponent {
   showOnlyCompleteness: boolean = false;
   showOnlyProfitability: boolean = false;
   openDialog: boolean = false;
+  itemsIdsWithZeroPrice: number[] = [];
 
   getProfitPercent(): (params: ValueGetterParams) => string {
     return (params: ValueGetterParams): string => {
@@ -150,5 +151,14 @@ export class LotComponent {
 
   async onDialogSubmit($event: any) {
     this.openDialog = false;
+  }
+
+  getAllLotsWithZeroPriceItems() {
+    const lotsWithZeroPriceItems = this.rowData.filter(e => {
+      return ((e.skin.minPrice == 0) || (e.skin.medianPrice == 0))
+        || (e.stickers.find(r => r.minPrice == 0 || r.medianPrice == 0) != undefined)
+    });
+    this.itemsIdsWithZeroPrice = lotsWithZeroPriceItems.map(e => e.id);
+    return !!lotsWithZeroPriceItems && lotsWithZeroPriceItems.length > 0;
   }
 }

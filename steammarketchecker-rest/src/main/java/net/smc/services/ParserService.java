@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.smc.common.CommonUtils;
 import net.smc.dto.dtofromjson.LotFromJsonDto;
@@ -20,14 +19,7 @@ import java.util.Map;
 public class ParserService {
     private final CommonUtils commonUtils;
 
-//    @PostConstruct
-    public void getListing() {
-        int countAsInt = 10;
-        String itemName = "StatTrak™ AWP | Fever Dream (Factory New)";
-        String convertedItemName = commonUtils.defaultStringConverter(itemName);
-        String url = String.format("https://steamcommunity.com/market/listings/730/%s/render/?query=&count=%d&country=UK&language=english&currency=5",
-                convertedItemName, countAsInt);
-
+    public void parseListingFromApi(String url) {
         String listingJsonAsString = commonUtils.connectAndGetJsonAsString(url);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -50,22 +42,15 @@ public class ParserService {
         }
     }
 
-//    @PostConstruct
-    public void getSteamItem() {
-        String itemName = "StatTrak™ Five-SeveN | Nightshade (Minimal Wear)";
-        String convertedItemName = commonUtils.defaultStringConverter(itemName);
-
-        String url = String.format("https://steamcommunity.com/market/priceoverview/?appid=730&currency=5&market_hash_name=%s",
-                convertedItemName);
-
+    public SteamItemFromJsonDto parseSteamItemFromApi(String url) {
+        SteamItemFromJsonDto steamItemFromJsonDto = null;
         String priceOverviewJsonAsString = commonUtils.connectAndGetJsonAsString(url);
-
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject priceOverviewJson = gson.fromJson(priceOverviewJsonAsString, JsonObject.class);
         if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()) {
-            Map<String, JsonElement> map = priceOverviewJson.asMap();
-            SteamItemFromJsonDto steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
+            steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
         }
+        return steamItemFromJsonDto;
     }
 
 }

@@ -16,6 +16,7 @@ public class ParseQueueDto {
     private String parseTarget;
     private String parseUrl;
     private boolean archive;
+    private Integer attempt;
 
     public ParseQueueDto(ParseQueue parseQueue) {
         this.id = parseQueue.getId();
@@ -24,5 +25,6 @@ public class ParseQueueDto {
         this.parseTarget = parseQueue.getParseTarget();
         this.parseUrl = parseQueue.getParseUrl();
         this.archive = parseQueue.isArchive();
+        this.attempt = parseQueue.getAttempt();
     }
 }

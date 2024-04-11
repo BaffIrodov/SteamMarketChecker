@@ -12,7 +12,6 @@ import net.smc.readers.ActiveNameReader;
 import net.smc.readers.ParseQueueReader;
 import net.smc.repositories.ActiveNameRepository;
 import net.smc.repositories.ParseQueueRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +34,10 @@ public class ActiveNameService {
     private final CommonUtils commonUtils;
 
     @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
-    public void parseActiveNamesByPeriod() {
-        List<ActiveName> allActiveNames = activeNameRepository.findAll();
+    public void parseActualActiveNamesByPeriod() {
+        List<ActiveName> allActualActiveNames = activeNameRepository.findAllByArchive(false);
         List<ActiveName> allOutdatedActiveNames = new ArrayList<>();
-        for (ActiveName activeName : allActiveNames) {
+        for (ActiveName activeName : allActualActiveNames) {
             long now = Instant.now().getEpochSecond();
             long parseDate = Optional.ofNullable(activeName.getLastParseDate()).orElse(Instant.MIN).getEpochSecond();
             if (now - parseDate > activeName.getParsePeriod() || activeName.isForceUpdate()) {
@@ -57,7 +56,8 @@ public class ActiveNameService {
                             activeName.getParseItemCount(), commonUtils));
                 }
             }
-            activeNameRepository.saveAll(allActiveNames);
+            // todo и то же самое для лотов
+            activeNameRepository.saveAll(allActualActiveNames);
             parseQueueRepository.saveAll(parseQueueList);
         }
     }

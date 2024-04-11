@@ -27,6 +27,7 @@ public class ParseQueue {
     private String parseTarget;
     private String parseUrl;
     private boolean archive;
+    private Integer attempt = 0;
 
     // конструктор на основе дто не нужен - никогда не создаем сущность от дто
 

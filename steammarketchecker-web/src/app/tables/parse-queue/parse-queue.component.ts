@@ -24,6 +24,7 @@ export class ParseQueueComponent {
   public columnDefs: ColDef[] = [
     { field: "id", headerName: "Идентификатор" },
     { field: "importance", headerName: "Важность" },
+    { field: "attempt", headerName: "Попытка" },
     { field: "parseType", headerName: "Тип парсинга" },
     { field: "parseTarget", headerName: "Цель парсинга" },
     { field: "parseUrl", headerName: "Полный url парсинга" },
