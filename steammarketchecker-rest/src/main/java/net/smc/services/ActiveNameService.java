@@ -7,11 +7,14 @@ import net.smc.dto.ActiveNameDto;
 import net.smc.dto.ParseQueueDto;
 import net.smc.entities.ActiveName;
 import net.smc.entities.ParseQueue;
+import net.smc.entities.SteamItem;
 import net.smc.enums.ParseType;
 import net.smc.readers.ActiveNameReader;
 import net.smc.readers.ParseQueueReader;
+import net.smc.readers.SteamItemReader;
 import net.smc.repositories.ActiveNameRepository;
 import net.smc.repositories.ParseQueueRepository;
+import net.smc.repositories.SteamItemRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +30,9 @@ public class ActiveNameService {
     private final ActiveNameReader activeNameReader;
     private final ActiveNameRepository activeNameRepository;
     private final ParseQueueRepository parseQueueRepository;
+    private final SteamItemRepository steamItemRepository;
     private final ParseQueueReader parseQueueReader;
+    private final SteamItemReader steamItemReader;
     private final CommonUtils commonUtils;
 
     @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
@@ -44,26 +49,36 @@ public class ActiveNameService {
         }
         // Для всех activeNames, которые требуют обновления, заводим задачу в очереди. И исправляем данные, из-за которых они outdated
         if (allOutdatedActiveNames.size() > 0) {
+            List<String> allOutdatedSteamItemNames = allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_skin").toList();
             List<ParseQueue> parseQueueList = new ArrayList<>();
+            // Ищем все задачи в очереди на это наименование
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForSkin = parseQueueReader.getMapQueueByTarget(
-                    allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_skin").toList(), false);
+                    allOutdatedSteamItemNames, false);
+            // Ищем все steamItem, уже существующие в базе, на это наименование
+            // (если steamItem уже существует, то мы его обновляем по собственному шедулеру, а не по этому)
+            List<String> steamItemNamesThatAlreadyExists = steamItemReader.getAllSteamItemNamesByNameList(allOutdatedSteamItemNames);
+
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForLot = parseQueueReader.getMapQueueByTarget(
                     allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_lot").toList(), false);
             for (ActiveName activeName : allOutdatedActiveNames) {
-                activeName.processOutdatedActiveName(); // Исправили данные
                 // Завели задачу в очереди на скин
-                if (mapParseQueueByParseTargetForSkin.get(activeName.getItemName() + "_skin") == null) {
+                // (задача заведется только если скина не существовало в базе и если задачи уже нет в очереди)
+                if (mapParseQueueByParseTargetForSkin.get(activeName.getItemName() + "_skin") == null
+                        && !steamItemNamesThatAlreadyExists.contains(activeName.getItemName() + "_skin")) {
+                    activeName.processOutdatedActiveName(); // Исправили данные
                     parseQueueList.add(new ParseQueue(0, ParseType.SKIN, activeName.getItemName() + "_skin",
                             activeName.getParseItemCount(), commonUtils));
                 }
                 // Завели задачу в очереди на лот
+                // (задача заведется, если задачи нет в очереди)
 //                if (mapParseQueueByParseTargetForLot.get(activeName.getItemName() + "_lot") == null) {
+//                    activeName.processOutdatedActiveName(); // Исправили данные
 //                    parseQueueList.add(new ParseQueue(0, ParseType.LOT, activeName.getItemName() + "_lot",
 //                            activeName.getParseItemCount(), commonUtils));
 //                }
             }
             // todo и то же самое для лотов
-            activeNameRepository.saveAll(allActualActiveNames);
+            activeNameRepository.saveAll(allOutdatedActiveNames);
             parseQueueRepository.saveAll(parseQueueList);
         }
     }

@@ -19,6 +19,7 @@ public class SteamItemDto {
     private Double medianPrice;
     private Long parseQueueId;
     private Instant parseDate;
+    private Integer parsePeriod; // in sec
     private boolean forceUpdate;
     private SteamItemType steamItemType;
 
@@ -30,6 +31,7 @@ public class SteamItemDto {
         this.medianPrice = steamItem.getMedianPrice();
         this.parseQueueId = steamItem.getParseQueueId();
         this.parseDate = steamItem.getParseDate();
+        this.parsePeriod = steamItem.getParsePeriod();
         this.forceUpdate = steamItem.isForceUpdate();
         this.steamItemType = steamItem.getSteamItemType();
     }

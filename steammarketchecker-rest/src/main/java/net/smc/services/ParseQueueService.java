@@ -22,6 +22,8 @@ public class ParseQueueService {
     @Value("${queue.max-attempts}")
     private Integer maxQueueAttempts;
 
+    @Value("${default-parse-period.steam-item}")
+    private Integer defaultSteamItemParsePeriod;
     private final ParseQueueReader parseQueueReader;
     private final ParseQueueRepository parseQueueRepository;
     private final SteamItemRepository steamItemRepository;
@@ -48,8 +50,9 @@ public class ParseQueueService {
                                     oneActualQueue.getParseTarget(),
                                     steamItemFromJsonDto.getMinPrice(),
                                     steamItemFromJsonDto.getMedianPrice(),
-                                    SteamItemType.valueOf(oneActualQueue.getParseType().toString()));
-                            steamItemRepository.saveAndFlush(newSteamItem);
+                                    SteamItemType.valueOf(oneActualQueue.getParseType().toString()),
+                                    defaultSteamItemParsePeriod);
+                                steamItemRepository.saveAndFlush(newSteamItem);
                         } else if (steamItemsWithThisName.size() == 1) { // Если такой скин/стикер уже существуют.
                             // Обновляем в базе старый steamItem. Проставляем ему цены.
                             steamItemsWithThisName.get(0).updateSteamItemPrices(

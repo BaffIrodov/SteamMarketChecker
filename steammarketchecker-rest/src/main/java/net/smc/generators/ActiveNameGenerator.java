@@ -14,6 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class ActiveNameGenerator {
+
+    @Value("${default-parse-period.active-name}")
+    private Integer defaultActiveNameParsePeriod;
+
     private final ActiveNameRepository activeNameRepository;
 
     private final List<String> exteriorList = List.of(
@@ -25,9 +29,9 @@ public class ActiveNameGenerator {
     );
 
     private final List<String> activeNames = List.of(
-            "FAMAS | Pulse (Factory New)",
-            "FAMAS | Pulse (Minimal Wear)",
-            "FAMAS | Pulse (Field-Tested)",
+//            "FAMAS | Pulse (Factory New)",
+//            "FAMAS | Pulse (Minimal Wear)",
+//            "FAMAS | Pulse (Field-Tested)",
             "FAMAS | Pulse (Well-Worn)"
             );
 
@@ -45,7 +49,7 @@ public class ActiveNameGenerator {
             log.warn("ActiveName tables (real data) filled");
             for (String activeName : activeNames) {
                 activeNameRepository.save(
-                        new ActiveName(activeName, 10, 60)
+                        new ActiveName(activeName, 10, defaultActiveNameParsePeriod)
                 );
             }
         }

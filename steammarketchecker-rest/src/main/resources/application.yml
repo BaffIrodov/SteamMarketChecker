@@ -5,10 +5,14 @@ server:
   port: 8081
 token:
   recover-clean-in-sec: "3600"
+default-parse-period:
+  steam-item: 60
+  active-name: 60
 scheduled:
   default: "25000"
   active-name: "1000"
   parse-queue: "5000"
+  steam-item: "1000"
 initialize:
   admin: true
   user: true

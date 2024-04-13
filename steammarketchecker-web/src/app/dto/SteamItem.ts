@@ -6,6 +6,7 @@ export class SteamItem {
   medianPrice: number;
   parseQueueId: number;
   parseDate: number;
+  parsePeriod: number;
   forceUpdate: boolean;
   steamItemType: SteamItemType;
 

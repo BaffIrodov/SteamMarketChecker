@@ -25,6 +25,7 @@ public class SteamItem {
     private Double medianPrice;
     private Long parseQueueId;
     private Instant parseDate;
+    private Integer parsePeriod; // in sec
     private boolean forceUpdate;
     @Enumerated(EnumType.STRING)
     @DefaultValue("SKIN")
@@ -38,15 +39,17 @@ public class SteamItem {
         this.medianPrice = steamItemDto.getMedianPrice();
         this.parseQueueId = steamItemDto.getParseQueueId(); //todo появились вопросы к этой штуке - она вроде не нужна
         this.parseDate = steamItemDto.getParseDate();
+        this.parsePeriod = steamItemDto.getParsePeriod();
         this.forceUpdate = steamItemDto.isForceUpdate();
         this.steamItemType = steamItemDto.getSteamItemType();
     }
 
-    public SteamItem(String name, Double minPrice, Double medianPrice, SteamItemType steamItemType) {
+    public SteamItem(String name, Double minPrice, Double medianPrice, SteamItemType steamItemType, Integer parsePeriod) {
         this.name = name;
         this.minPrice = minPrice;
         this.medianPrice = medianPrice;
         this.parseDate = Instant.now();
+        this.parsePeriod = parsePeriod;
         this.steamItemType = steamItemType;
     }
 
@@ -55,6 +58,11 @@ public class SteamItem {
         this.setMedianPrice(medianPrice);
         this.setParseDate(Instant.now());
         this.setParseQueueId(null);
+    }
+
+    public void processOutdatedSteamItem() {
+        this.setParseDate(Instant.now());
+        this.setForceUpdate(false);
     }
 
     public void forceUpdate() {

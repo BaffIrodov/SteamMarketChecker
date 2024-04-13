@@ -102,10 +102,10 @@ public class DataGenerator {
             }
             lotRepository.saveAllAndFlush(lotList);
             for (int i = 0; i < skinCount; i++) {
-                skinList.add(new SteamItem("generatedSkinName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.SKIN));
+                skinList.add(new SteamItem("generatedSkinName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.SKIN, 10));
             }
             for (int i = 0; i < stickerCount; i++) {
-                stickerList.add(new SteamItem("generatedStickerName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.STICKER));
+                stickerList.add(new SteamItem("generatedStickerName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.STICKER, 10));
             }
             steamItemRepository.saveAllAndFlush(skinList);
             steamItemRepository.saveAllAndFlush(stickerList);

@@ -33,6 +33,7 @@ export class SteamItemComponent {
         return data.value ? (new Date(data.value * 1000)).toLocaleString() : "";
       }
     },
+    { field: "parsePeriod", headerName: "Период парсинга" },
     {
       field: "forceUpdate", headerName: "Принудительный апдейт", cellRenderer: (params: { forceUpdate: any; }) => {
         return params.forceUpdate ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`

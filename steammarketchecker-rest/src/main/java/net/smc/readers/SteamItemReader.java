@@ -45,4 +45,11 @@ public class SteamItemReader {
                 .where(qSteamItem.id.in(ids))
                 .fetch();
     }
+
+    public List<String> getAllSteamItemNamesByNameList(List<String> nameList) {
+        return queryFactory.from(qSteamItem)
+                .select(qSteamItem.name)
+                .where(qSteamItem.name.in(nameList))
+                .fetch();
+    }
 }
