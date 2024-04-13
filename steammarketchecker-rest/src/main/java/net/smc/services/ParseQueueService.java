@@ -3,10 +3,8 @@ package net.smc.services;
 import lombok.RequiredArgsConstructor;
 import net.smc.dto.ParseQueueDto;
 import net.smc.dto.dtofromjson.SteamItemFromJsonDto;
-import net.smc.entities.ActiveName;
 import net.smc.entities.ParseQueue;
 import net.smc.entities.SteamItem;
-import net.smc.enums.ParseType;
 import net.smc.enums.SteamItemType;
 import net.smc.readers.ParseQueueReader;
 import net.smc.repositories.ParseQueueRepository;
@@ -15,11 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +29,7 @@ public class ParseQueueService {
 
     @Scheduled(fixedDelayString = "${scheduled.parse-queue}", initialDelay = 1000)
     public void parseActiveNamesByPeriod() {
-        List<ParseQueue> allActualParseQueues = parseQueueRepository.findAllByArchiveOrderByImportanceDesc(false);
+        List<ParseQueue> allActualParseQueues = parseQueueRepository.findAllByArchiveOrderByImportanceDescIdAsc(false);
         if (allActualParseQueues.size() > 0) {
             ParseQueue oneActualQueue = allActualParseQueues.get(0);
             switch (oneActualQueue.getParseType()) {
@@ -58,10 +52,8 @@ public class ParseQueueService {
                             steamItemRepository.saveAndFlush(newSteamItem);
                         } else if (steamItemsWithThisName.size() == 1) { // Если такой скин/стикер уже существуют.
                             // Обновляем в базе старый steamItem. Проставляем ему цены.
-                            steamItemsWithThisName.get(0).setMinPrice(steamItemFromJsonDto.getMinPrice());
-                            steamItemsWithThisName.get(0).setMedianPrice(steamItemFromJsonDto.getMedianPrice());
-                            steamItemsWithThisName.get(0).setParseDate(Instant.now());
-                            steamItemsWithThisName.get(0).setParseQueueId(null);
+                            steamItemsWithThisName.get(0).updateSteamItemPrices(
+                                    steamItemFromJsonDto.getMinPrice(), steamItemFromJsonDto.getMedianPrice());
                             steamItemRepository.saveAllAndFlush(steamItemsWithThisName);
                         } else {
                             // не должно случиться по constraint

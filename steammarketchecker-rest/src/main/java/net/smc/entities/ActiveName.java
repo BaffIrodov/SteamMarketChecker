@@ -52,6 +52,11 @@ public class ActiveName {
         this.forceUpdate = activeNameDto.isForceUpdate();
     }
 
+    public void processOutdatedActiveName() {
+        this.setLastParseDate(Instant.now());
+        this.setForceUpdate(false);
+    }
+
     public void archiveOrUnarchive() {
         this.archive = !this.archive;
     }

@@ -19,11 +19,12 @@ default-user:
   full-name: "Админ Админович Админов"
 generators:
   message: false
-  active-name: true
-  parse-queue: true
-  lot-with-steam-items: true
+  active-name: false
+  real-active-name: true
+  parse-queue: false
+  lot-with-steam-items: false
 truncate-table:
-  active-name: true
+  active-name: false
   parse-queue: true
   lot: true
   lot-sticker: true

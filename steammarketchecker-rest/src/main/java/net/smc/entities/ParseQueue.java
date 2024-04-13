@@ -45,12 +45,12 @@ public class ParseQueue {
         this.parseTarget = parseTarget;
         switch (parseType) {
             case LOT -> {
-                String convertedLotName = commonUtils.defaultStringConverter(parseTarget);
+                String convertedLotName = commonUtils.defaultStringConverter(parseTarget.replaceAll("_lot", ""));
                 this.parseUrl = String.format("https://steamcommunity.com/market/listings/730/%s/render/?query=&count=%d&country=UK&language=english&currency=5",
                         convertedLotName, parseItemCount);
             }
             case SKIN, STICKER -> {
-                String convertedItemName = commonUtils.defaultStringConverter(parseTarget);
+                String convertedItemName = commonUtils.defaultStringConverter(parseTarget.replaceAll("_skin", ""));
                 this.parseUrl = String.format("https://steamcommunity.com/market/priceoverview/?appid=730&currency=5&market_hash_name=%s",
                         convertedItemName);
             }

@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +34,7 @@ public class ActiveNameService {
     public void parseActualActiveNamesByPeriod() {
         List<ActiveName> allActualActiveNames = activeNameRepository.findAllByArchive(false);
         List<ActiveName> allOutdatedActiveNames = new ArrayList<>();
+        // Определяем, какие activeNames требуют обновления из-за просрочки или требования пользователя
         for (ActiveName activeName : allActualActiveNames) {
             long now = Instant.now().getEpochSecond();
             long parseDate = Optional.ofNullable(activeName.getLastParseDate()).orElse(Instant.MIN).getEpochSecond();
@@ -44,17 +42,25 @@ public class ActiveNameService {
                 allOutdatedActiveNames.add(activeName);
             }
         }
+        // Для всех activeNames, которые требуют обновления, заводим задачу в очереди. И исправляем данные, из-за которых они outdated
         if (allOutdatedActiveNames.size() > 0) {
             List<ParseQueue> parseQueueList = new ArrayList<>();
-            Map<String, ParseQueueDto> mapParseQueueByParseTarget = parseQueueReader.getMapQueueByTarget(
-                    allOutdatedActiveNames.stream().map(ActiveName::getItemName).toList(), false);
+            Map<String, ParseQueueDto> mapParseQueueByParseTargetForSkin = parseQueueReader.getMapQueueByTarget(
+                    allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_skin").toList(), false);
+            Map<String, ParseQueueDto> mapParseQueueByParseTargetForLot = parseQueueReader.getMapQueueByTarget(
+                    allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_lot").toList(), false);
             for (ActiveName activeName : allOutdatedActiveNames) {
-                activeName.setLastParseDate(Instant.now());
-                activeName.setForceUpdate(false);
-                if (mapParseQueueByParseTarget.get(activeName.getItemName()) == null) {
-                    parseQueueList.add(new ParseQueue(0, ParseType.SKIN, activeName.getItemName(),
+                activeName.processOutdatedActiveName(); // Исправили данные
+                // Завели задачу в очереди на скин
+                if (mapParseQueueByParseTargetForSkin.get(activeName.getItemName() + "_skin") == null) {
+                    parseQueueList.add(new ParseQueue(0, ParseType.SKIN, activeName.getItemName() + "_skin",
                             activeName.getParseItemCount(), commonUtils));
                 }
+                // Завели задачу в очереди на лот
+//                if (mapParseQueueByParseTargetForLot.get(activeName.getItemName() + "_lot") == null) {
+//                    parseQueueList.add(new ParseQueue(0, ParseType.LOT, activeName.getItemName() + "_lot",
+//                            activeName.getParseItemCount(), commonUtils));
+//                }
             }
             // todo и то же самое для лотов
             activeNameRepository.saveAll(allActualActiveNames);

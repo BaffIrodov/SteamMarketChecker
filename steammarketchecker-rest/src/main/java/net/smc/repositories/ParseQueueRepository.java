@@ -12,4 +12,6 @@ public interface ParseQueueRepository extends JpaRepository<ParseQueue, Long> {
 
     public List<ParseQueue> findAllByArchiveOrderByImportanceDesc(boolean archive);
 
+    public List<ParseQueue> findAllByArchiveOrderByImportanceDescIdAsc(boolean archive); //чтобы какую-то старую задачу не
+
 }

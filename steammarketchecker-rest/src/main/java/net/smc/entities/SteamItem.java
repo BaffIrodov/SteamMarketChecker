@@ -36,7 +36,7 @@ public class SteamItem {
         this.name = steamItemDto.getName();
         this.minPrice = steamItemDto.getMinPrice();
         this.medianPrice = steamItemDto.getMedianPrice();
-        this.parseQueueId = steamItemDto.getParseQueueId();
+        this.parseQueueId = steamItemDto.getParseQueueId(); //todo появились вопросы к этой штуке - она вроде не нужна
         this.parseDate = steamItemDto.getParseDate();
         this.forceUpdate = steamItemDto.isForceUpdate();
         this.steamItemType = steamItemDto.getSteamItemType();
@@ -48,6 +48,13 @@ public class SteamItem {
         this.medianPrice = medianPrice;
         this.parseDate = Instant.now();
         this.steamItemType = steamItemType;
+    }
+
+    public void updateSteamItemPrices(Double minPrice, Double medianPrice) {
+        this.setMinPrice(minPrice);
+        this.setMedianPrice(medianPrice);
+        this.setParseDate(Instant.now());
+        this.setParseQueueId(null);
     }
 
     public void forceUpdate() {
