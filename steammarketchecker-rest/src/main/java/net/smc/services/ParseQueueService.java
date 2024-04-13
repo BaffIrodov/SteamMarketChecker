@@ -2,6 +2,7 @@ package net.smc.services;
 
 import lombok.RequiredArgsConstructor;
 import net.smc.dto.ParseQueueDto;
+import net.smc.dto.dtofromjson.LotFromJsonDto;
 import net.smc.dto.dtofromjson.SteamItemFromJsonDto;
 import net.smc.entities.ParseQueue;
 import net.smc.entities.SteamItem;
@@ -36,9 +37,21 @@ public class ParseQueueService {
             ParseQueue oneActualQueue = allActualParseQueues.get(0);
             switch (oneActualQueue.getParseType()) {
                 case LOT -> {
+                    // Парсим данные о лотах со стикерами со steamMarket
+                    List<LotFromJsonDto> lotsFromJsonDto = parserService.parseListingFromApi(oneActualQueue.getParseUrl());
+                    // Если данные пришли нормальные
+                    if (lotsFromJsonDto != null && !lotsFromJsonDto.isEmpty()) {
+                        // Пробегаемся по каждому лоту. С каждого лота создается одна запись в таблицу лотов
+                        // А также одна/несколько записей в steamItem (как стикер)
+                        for (LotFromJsonDto lot : lotsFromJsonDto) {
+                            // лоту назначить payload из очереди
+                        }
+                    }
                 }
                 case SKIN, STICKER -> {
+                    // Парсим данные о цене скина/стикера со steamMarket
                     SteamItemFromJsonDto steamItemFromJsonDto = parserService.parseSteamItemFromApi(oneActualQueue.getParseUrl());
+                    // Если данные пришли нормальные
                     if (steamItemFromJsonDto != null
                             && steamItemFromJsonDto.getMinPrice() != null
                             && steamItemFromJsonDto.getMedianPrice() != null) {
@@ -52,7 +65,7 @@ public class ParseQueueService {
                                     steamItemFromJsonDto.getMedianPrice(),
                                     SteamItemType.valueOf(oneActualQueue.getParseType().toString()),
                                     defaultSteamItemParsePeriod);
-                                steamItemRepository.saveAndFlush(newSteamItem);
+                            steamItemRepository.saveAndFlush(newSteamItem);
                         } else if (steamItemsWithThisName.size() == 1) { // Если такой скин/стикер уже существуют.
                             // Обновляем в базе старый steamItem. Проставляем ему цены.
                             steamItemsWithThisName.get(0).updateSteamItemPrices(
@@ -65,7 +78,7 @@ public class ParseQueueService {
                         // если всё успешно
                         oneActualQueue.setArchive(true);
                         parseQueueRepository.saveAndFlush(oneActualQueue);
-                    } else {
+                    } else { // Иначе произошел сбой - откладываем задачу на потом
                         oneActualQueue.setAttempt(oneActualQueue.getAttempt() + 1);
                         if (oneActualQueue.getAttempt() > maxQueueAttempts) {
                             parseQueueRepository.delete(oneActualQueue);

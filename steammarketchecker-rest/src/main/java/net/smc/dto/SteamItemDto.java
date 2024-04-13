@@ -13,7 +13,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class SteamItemDto {
     private Long id;
-    private Long steamItemId;
     private String name;
     private Double minPrice;
     private Double medianPrice;
@@ -25,7 +24,6 @@ public class SteamItemDto {
 
     public SteamItemDto(SteamItem steamItem) {
         this.id = steamItem.getId();
-        this.steamItemId = steamItem.getSteamItemId();
         this.name = steamItem.getName();
         this.minPrice = steamItem.getMinPrice();
         this.medianPrice = steamItem.getMedianPrice();

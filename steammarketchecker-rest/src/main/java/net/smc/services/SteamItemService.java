@@ -11,6 +11,7 @@ import net.smc.enums.ParseType;
 import net.smc.enums.SteamItemType;
 import net.smc.readers.ParseQueueReader;
 import net.smc.readers.SteamItemReader;
+import net.smc.repositories.LotRepository;
 import net.smc.repositories.ParseQueueRepository;
 import net.smc.repositories.SteamItemRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +31,7 @@ public class SteamItemService {
     // todo тут нужен свой шедулер для обновления
     private final SteamItemReader steamItemReader;
     private final SteamItemRepository steamItemRepository;
+    private final LotRepository lotRepository;
     private final ParseQueueRepository parseQueueRepository;
     private final ParseQueueReader parseQueueReader;
     private final CommonUtils commonUtils;
@@ -51,14 +53,14 @@ public class SteamItemService {
         if (allOutdatedSteamItems.size() > 0) {
             List<ParseQueue> parseQueueList = new ArrayList<>();
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForSkin = parseQueueReader.getMapQueueByTarget(
-                    allOutdatedSteamItems.stream().map(e -> e.getName() + "_skin").toList(), false);
+                    allOutdatedSteamItems.stream().map(e -> e.getName() /*+ "_skin"*/).toList(), false);
             for (SteamItem steamItem : allOutdatedSteamItems) {
                 // Завели задачу в очереди на скин
                 // (задача заведется, если задачи нет в очереди)
-                if (mapParseQueueByParseTargetForSkin.get(steamItem.getName() + "_skin") == null) {
+                if (mapParseQueueByParseTargetForSkin.get(steamItem.getName() /*+ "_skin"*/) == null) {
                     steamItem.processOutdatedSteamItem(); // Исправили данные
-                    parseQueueList.add(new ParseQueue(0, ParseType.SKIN, steamItem.getName() + "_skin",
-                            0, commonUtils));
+                    parseQueueList.add(new ParseQueue(0, ParseType.SKIN, steamItem.getName() /*+ "_skin"*/,
+                            0, null, commonUtils));
                 }
             }
             steamItemRepository.saveAll(allOutdatedSteamItems);

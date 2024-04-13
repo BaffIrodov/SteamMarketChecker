@@ -30,7 +30,6 @@ public class LotReader {
                 qLot.assetId,
                 Projections.bean(SteamItemDto.class,
                         qSteamItem.id,
-                        qSteamItem.steamItemId,
                         qSteamItem.name,
                         qSteamItem.minPrice,
                         qSteamItem.medianPrice,

@@ -26,6 +26,7 @@ public class ParseQueue {
 
     private String parseTarget;
     private String parseUrl;
+    private Long steamItemId; // Для лота - это id скина в базе
     private boolean archive;
     private Integer attempt = 0;
 
@@ -39,12 +40,13 @@ public class ParseQueue {
     }
 
     public ParseQueue(Integer importance, ParseType parseType, String parseTarget,
-                      Integer parseItemCount, CommonUtils commonUtils) {
+                      Integer parseItemCount, Long steamItemId, CommonUtils commonUtils) {
         this.importance = importance;
         this.parseType = parseType;
         this.parseTarget = parseTarget;
         switch (parseType) {
             case LOT -> {
+                this.steamItemId = steamItemId;
                 String convertedLotName = commonUtils.defaultStringConverter(parseTarget.replaceAll("_lot", ""));
                 this.parseUrl = String.format("https://steamcommunity.com/market/listings/730/%s/render/?query=&count=%d&country=UK&language=english&currency=5",
                         convertedLotName, parseItemCount);

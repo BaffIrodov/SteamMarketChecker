@@ -19,7 +19,7 @@ import java.util.Map;
 public class ParserService {
     private final CommonUtils commonUtils;
 
-    public void parseListingFromApi(String url) {
+    public List<LotFromJsonDto> parseListingFromApi(String url) {
         String listingJsonAsString = commonUtils.connectAndGetJsonAsString(url);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -40,6 +40,7 @@ public class ParserService {
                 }
             });
         }
+        return lotsWithStickers;
     }
 
     public SteamItemFromJsonDto parseSteamItemFromApi(String url) {

@@ -9,12 +9,14 @@ import net.smc.entities.ActiveName;
 import net.smc.entities.ParseQueue;
 import net.smc.entities.SteamItem;
 import net.smc.enums.ParseType;
+import net.smc.enums.SteamItemType;
 import net.smc.readers.ActiveNameReader;
 import net.smc.readers.ParseQueueReader;
 import net.smc.readers.SteamItemReader;
 import net.smc.repositories.ActiveNameRepository;
 import net.smc.repositories.ParseQueueRepository;
 import net.smc.repositories.SteamItemRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +28,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ActiveNameService {
-
+    @Value("${default-parse-period.steam-item}")
+    private Integer defaultSteamItemParsePeriod;
     private final ActiveNameReader activeNameReader;
     private final ActiveNameRepository activeNameRepository;
     private final ParseQueueRepository parseQueueRepository;
@@ -61,23 +64,25 @@ public class ActiveNameService {
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForLot = parseQueueReader.getMapQueueByTarget(
                     allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_lot").toList(), false);
             for (ActiveName activeName : allOutdatedActiveNames) {
-                // Завели задачу в очереди на скин
-                // (задача заведется только если скина не существовало в базе и если задачи уже нет в очереди)
-                if (mapParseQueueByParseTargetForSkin.get(activeName.getItemName() + "_skin") == null
-                        && !steamItemNamesThatAlreadyExists.contains(activeName.getItemName() + "_skin")) {
-                    activeName.processOutdatedActiveName(); // Исправили данные
-                    parseQueueList.add(new ParseQueue(0, ParseType.SKIN, activeName.getItemName() + "_skin",
-                            activeName.getParseItemCount(), commonUtils));
+                SteamItem skin = null;
+                // Если такого скина ещё не существует в базе, то заведем его сразу же.
+                // Он самостоятельно обновит свою цену по собственному шедулеру.
+                // Так как дату не ставим, то outdated он станет на первой же итерации шедулера.
+                // Если уже есть - то берем его
+                if (!steamItemNamesThatAlreadyExists.contains(activeName.getItemName() + "_skin")) {
+                    skin = new SteamItem(activeName.getItemName() + "_skin", SteamItemType.SKIN, defaultSteamItemParsePeriod);
+                    steamItemRepository.saveAndFlush(skin);
+                } else {
+                    skin = steamItemRepository.findAllByName(activeName.getItemName() + "_skin").get(0);
                 }
                 // Завели задачу в очереди на лот
                 // (задача заведется, если задачи нет в очереди)
-//                if (mapParseQueueByParseTargetForLot.get(activeName.getItemName() + "_lot") == null) {
-//                    activeName.processOutdatedActiveName(); // Исправили данные
-//                    parseQueueList.add(new ParseQueue(0, ParseType.LOT, activeName.getItemName() + "_lot",
-//                            activeName.getParseItemCount(), commonUtils));
-//                }
+                if (mapParseQueueByParseTargetForLot.get(activeName.getItemName() + "_lot") == null) {
+                    activeName.processOutdatedActiveName(); // Исправили данные
+                    parseQueueList.add(new ParseQueue(0, ParseType.LOT, activeName.getItemName() + "_lot",
+                            activeName.getParseItemCount(), skin.getId(), commonUtils));
+                }
             }
-            // todo и то же самое для лотов
             activeNameRepository.saveAll(allOutdatedActiveNames);
             parseQueueRepository.saveAll(parseQueueList);
         }

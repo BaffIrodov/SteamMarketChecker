@@ -19,7 +19,6 @@ public class SteamItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-    private Long steamItemId;
     private String name;
     private Double minPrice;
     private Double medianPrice;
@@ -33,7 +32,6 @@ public class SteamItem {
 
     public SteamItem(SteamItemDto steamItemDto) {
         this.id = steamItemDto.getId();
-        this.steamItemId = steamItemDto.getSteamItemId();
         this.name = steamItemDto.getName();
         this.minPrice = steamItemDto.getMinPrice();
         this.medianPrice = steamItemDto.getMedianPrice();
@@ -49,8 +47,15 @@ public class SteamItem {
         this.minPrice = minPrice;
         this.medianPrice = medianPrice;
         this.parseDate = Instant.now();
-        this.parsePeriod = parsePeriod;
         this.steamItemType = steamItemType;
+        this.parsePeriod = parsePeriod;
+    }
+
+    // На случай, когда нужно создать пустышку-заглушку для связи лота и скина/стикера
+    public SteamItem(String name, SteamItemType steamItemType, Integer parsePeriod) {
+        this.name = name;
+        this.steamItemType = steamItemType;
+        this.parsePeriod = parsePeriod;
     }
 
     public void updateSteamItemPrices(Double minPrice, Double medianPrice) {
