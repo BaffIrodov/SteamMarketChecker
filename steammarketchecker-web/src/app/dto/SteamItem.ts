@@ -3,7 +3,6 @@ export class SteamItem {
   steamItemId: number;
   name: string;
   minPrice: number;
-  medianPrice: number;
   parseQueueId: number;
   parseDate: number;
   parsePeriod: number;

@@ -154,11 +154,11 @@ export class LotComponent {
   }
 
   getAllLotsWithZeroPriceItems() {
-    const lotsWithZeroPriceItems = this.rowData.filter(e => {
-      return ((e.skin.minPrice == 0) || (e.skin.medianPrice == 0))
-        || (e.stickers.find(r => r.minPrice == 0 || r.medianPrice == 0) != undefined)
+    const lotsWithZeroPriceItems = this.rowData?.filter(e => {
+      return ((e.skin.minPrice == 0))
+        || (e.stickers.find(r => r.minPrice == 0) != undefined)
     });
-    this.itemsIdsWithZeroPrice = lotsWithZeroPriceItems.map(e => e.id);
+    this.itemsIdsWithZeroPrice = lotsWithZeroPriceItems?.map(e => e.id);
     return !!lotsWithZeroPriceItems && lotsWithZeroPriceItems.length > 0;
   }
 }

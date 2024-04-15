@@ -25,7 +25,6 @@ export class SteamItemComponent {
     { field: "steamItemId", headerName: "Идентификатор стима для айтема" },
     { field: "name", headerName: "Название айтема" },
     { field: "minPrice", headerName: "Минимальная цена" },
-    { field: "medianPrice", headerName: "Медианная цена" },
     {
       field: "parseDate",
       headerName: "Дата последнего парсинга",
