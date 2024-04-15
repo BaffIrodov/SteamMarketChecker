@@ -43,6 +43,7 @@ public class Lot {
     private Instant priceCalculatingDate;
     private Instant parseDate;
     private String stickersAsString;
+    private Integer positionInListing;
 
     public Lot(Double profit, Double convertedPrice, Double convertedFee, Double realPrice) {
         this.profit = profit;
@@ -60,6 +61,7 @@ public class Lot {
         this.convertedFee = lotFromJsonDto.getConvertedFee();
         this.stickersAsString = lotFromJsonDto.getStickersAsString();
         this.steamItem = steamItem;
+        this.positionInListing = lotFromJsonDto.getPositionInListing();
     }
 
     // конструктор на основе lotDto тут не нужен - эта сущность никогда не создается из дто

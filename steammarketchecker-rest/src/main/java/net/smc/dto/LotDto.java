@@ -35,6 +35,7 @@ public class LotDto {
     private Instant priceCalculatingDate;
     private Instant parseDate;
     private String stickersAsString;
+    private Integer positionInListing;
 
     public LotDto(Lot lot) {
         this.id = lot.getId();
@@ -55,5 +56,6 @@ public class LotDto {
         this.priceCalculatingDate = lot.getPriceCalculatingDate();
         this.parseDate = lot.getParseDate();
         this.stickersAsString = lot.getStickersAsString();
+        this.positionInListing = lot.getPositionInListing();
     }
 }

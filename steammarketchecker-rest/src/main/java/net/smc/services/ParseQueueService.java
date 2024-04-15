@@ -177,6 +177,8 @@ public class ParseQueueService {
 
     private void putQueueAside(ParseQueue oneActualQueue) {
         oneActualQueue.setAttempt(oneActualQueue.getAttempt() + 1);
+        //Понизим приоритет - чтобы одна очередь не занимала всё
+        oneActualQueue.setImportance(oneActualQueue.getImportance() - 1);
         if (oneActualQueue.getAttempt() > maxQueueAttempts) {
             parseQueueRepository.delete(oneActualQueue);
         } else {

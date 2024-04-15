@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class ParserService {
 
     public ParseResultForLot parseListingFromApi(String url) {
         String listingJsonAsString = commonUtils.connectAndGetJsonAsString(url);
+        AtomicInteger positionInListing = new AtomicInteger();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject listingJson = gson.fromJson(listingJsonAsString, JsonObject.class);
@@ -41,8 +43,10 @@ public class ParserService {
                     String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Sticker).{9}", "")
                             .replaceAll("</center>.*", "");
                     lotFromJsonDto.setStickersAsString(stickersAsString);
+                    lotFromJsonDto.setPositionInListing(positionInListing.get());
                     lotsWithStickers.add(lotFromJsonDto);
                 }
+                positionInListing.getAndIncrement();
             });
             parseResultForLot.setConnectSuccessful(true);
             parseResultForLot.setLotWithStickersFromJsonDtoList(lotsWithStickers);

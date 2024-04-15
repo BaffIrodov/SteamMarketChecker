@@ -16,6 +16,7 @@ public class LotFromJsonDto {
     private Double convertedFee; // комиссия - нормированная
     private Long assetId;
     private String stickersAsString;
+    private Integer positionInListing;
 
     public LotFromJsonDto(JsonElement jsonElementListingInfo) {
         Map<String, JsonElement> mapListingInfo = jsonElementListingInfo.getAsJsonObject().asMap();
