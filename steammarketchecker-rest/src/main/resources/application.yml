@@ -13,6 +13,7 @@ scheduled:
   active-name: "1000"
   parse-queue: "5000"
   steam-item: "1000"
+  actual-currency-relation: "3600000"
 initialize:
   admin: true
   user: true

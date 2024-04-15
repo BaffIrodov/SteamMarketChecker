@@ -27,8 +27,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class SteamItemService {
-
-    // todo тут нужен свой шедулер для обновления
     private final SteamItemReader steamItemReader;
     private final SteamItemRepository steamItemRepository;
     private final LotRepository lotRepository;

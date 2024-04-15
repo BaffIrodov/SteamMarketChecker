@@ -1,10 +1,11 @@
 package net.smc.services;
 
-import com.querydsl.core.group.GroupBy;
 import lombok.RequiredArgsConstructor;
+import net.smc.dto.ActualCurrencyRelationDto;
 import net.smc.dto.LotDto;
 import net.smc.dto.SteamItemDto;
 import net.smc.entities.Lot;
+import net.smc.readers.ActualCurrencyRelationReader;
 import net.smc.readers.LotReader;
 import net.smc.repositories.LotRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LotService {
     private final LotReader lotReader;
+    private final ActualCurrencyRelationReader actualCurrencyRelationReader;
     private final LotRepository lotRepository;
 
     public List<LotDto> getAllLots(Boolean onlyActual, Boolean onlyCompleteness, Boolean onlyProfitability) {
@@ -34,6 +36,10 @@ public class LotService {
             mapLotDtoById.get(lotEntity.getId()).setStickers(stickerDtoList);
         });
         return allLots;
+    }
+
+    public ActualCurrencyRelationDto getActualCurrencyRelation() {
+        return actualCurrencyRelationReader.getActualCurrencyRelationDto();
     }
 
     // todo здесь нужен шедулер, который будет проверять completeness

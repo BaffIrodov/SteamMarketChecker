@@ -1,6 +1,7 @@
 package net.smc.controllers;
 
 import lombok.RequiredArgsConstructor;
+import net.smc.dto.ActualCurrencyRelationDto;
 import net.smc.dto.LotDto;
 import net.smc.dto.SteamItemDto;
 import net.smc.services.LotService;
@@ -22,5 +23,10 @@ public class LotController {
                                    @RequestParam Boolean onlyCompleteness,
                                    @RequestParam Boolean onlyProfitability) {
         return lotService.getAllLots(onlyActual, onlyCompleteness, onlyProfitability);
+    }
+
+    @GetMapping("currency")
+    public ActualCurrencyRelationDto getActualCurrencyRelation() {
+        return lotService.getActualCurrencyRelation();
     }
 }

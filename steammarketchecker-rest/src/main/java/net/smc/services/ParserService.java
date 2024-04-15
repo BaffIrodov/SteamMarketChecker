@@ -62,7 +62,8 @@ public class ParserService {
         String priceOverviewJsonAsString = commonUtils.connectAndGetJsonAsString(url);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject priceOverviewJson = gson.fromJson(priceOverviewJsonAsString, JsonObject.class);
-        if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()) {
+        if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()
+                && priceOverviewJson.asMap().get("lowest_price") != null) {
             steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
             parseResultForSteamItem.setConnectSuccessful(true);
             parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
