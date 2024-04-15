@@ -96,10 +96,10 @@ public class ParseQueueService {
                     lotRepository.saveAndFlush(lot);
                     createSteamItemsAndLotStickerForStickers(lotFromJson, lot, mapStickerIdByName, mapStickerById);
                 }
-                // если всё успешно
-                oneActualQueue.setArchive(true);
-                parseQueueRepository.saveAndFlush(oneActualQueue);
             }
+            // если всё успешно
+            oneActualQueue.setArchive(true);
+            parseQueueRepository.saveAndFlush(oneActualQueue);
         } else { // Иначе произошел сбой - откладываем задачу на потом
             putQueueAside(oneActualQueue);
         }
@@ -109,7 +109,7 @@ public class ParseQueueService {
         List<String> allStickersUnprocessed = lotsWithStickers.stream().map(LotFromJsonDto::getStickersAsString).toList();
         List<String> allStickersProcessed = new ArrayList<>();
         allStickersUnprocessed.forEach(multipleStickersAsString ->
-                Arrays.stream(multipleStickersAsString.split(", "))
+                splitStickers(multipleStickersAsString)
                         .forEach(stickerName -> allStickersProcessed.add(stickerName + "_sticker")));
         return steamItemReader.getAllSteamItemIdByName(allStickersProcessed);
     }
@@ -118,7 +118,7 @@ public class ParseQueueService {
                                                           Map<String, Long> mapStickerIdByName,
                                                           Map<Long, SteamItem> mapStickerById) {
         List<LotSticker> lotStickers = new ArrayList<>();
-        List<String> stickerNames = List.of(lotFromJson.getStickersAsString().split(", "));
+        List<String> stickerNames = splitStickers(lotFromJson.getStickersAsString());
         stickerNames.forEach(stickerName -> {
             // Если такой стикер уже существует, то берем его id. Создаем соответствующий lotSticker.
             Long stickerId = mapStickerIdByName.get(stickerName + "_sticker");
@@ -138,6 +138,24 @@ public class ParseQueueService {
             }
         });
         lotStickerRepository.saveAllAndFlush(lotStickers);
+    }
+
+    private List<String> splitStickers(String stickersAsString) {
+        String[] stringArray = stickersAsString.split(", ");
+        List<String> result = new ArrayList<>();
+        if (Arrays.stream(stringArray).anyMatch(e -> e.contains("Champion"))) {
+            for (int i = 0; i < stringArray.length; i++) {
+                if (stringArray[i].contains("Champion")) {
+                    result.remove(stringArray[i-1]);
+                    result.add(stringArray[i-1] + ", " + stringArray[i]);
+                } else {
+                    result.add(stringArray[i]);
+                }
+            }
+            return result;
+        } else {
+            return List.of(stringArray);
+        }
     }
 
     private void steamItemParsing(ParseQueue oneActualQueue) {

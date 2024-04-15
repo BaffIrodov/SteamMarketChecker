@@ -33,6 +33,14 @@ public class ActiveNameGenerator {
 //            "FAMAS | Pulse (Minimal Wear)",
 //            "FAMAS | Pulse (Field-Tested)",
 //            "FAMAS | Pulse (Well-Worn)"
+//            "AWP | Electric Hive (Field-Tested)"
+            "AWP | Electric Hive (Factory New)",
+            "Desert Eagle | Oxide Blaze (Factory New)",
+            "AWP | Fever Dream (Factory New)",
+            "AWP | Electric Hive (Well-Worn)",
+            "M4A4 | X-Ray (Minimal Wear)",
+            "AWP | Corticera (Factory New)",
+            "AK-47 | Blue Laminate (Minimal Wear)",
             "AWP | Electric Hive (Field-Tested)"
             );
 
