@@ -59,7 +59,7 @@ public class ActiveNameService {
                     allOutdatedSteamItemNames, false);
             // Ищем все steamItem, уже существующие в базе, на это наименование
             // (если steamItem уже существует, то мы его обновляем по собственному шедулеру, а не по этому)
-            List<String> steamItemNamesThatAlreadyExists = steamItemReader.getAllSteamItemNamesByNameList(allOutdatedSteamItemNames);
+            Map<String, Long> steamItemIdsByNamesThatAlreadyExists = steamItemReader.getAllSteamItemIdByName(allOutdatedSteamItemNames);
 
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForLot = parseQueueReader.getMapQueueByTarget(
                     allOutdatedActiveNames.stream().map(e -> e.getItemName() + "_lot").toList(), false);
@@ -69,7 +69,7 @@ public class ActiveNameService {
                 // Он самостоятельно обновит свою цену по собственному шедулеру.
                 // Так как дату не ставим, то outdated он станет на первой же итерации шедулера.
                 // Если уже есть - то берем его
-                if (!steamItemNamesThatAlreadyExists.contains(activeName.getItemName() + "_skin")) {
+                if (steamItemIdsByNamesThatAlreadyExists.get(activeName.getItemName() + "_skin") == null) {
                     skin = new SteamItem(activeName.getItemName() + "_skin", SteamItemType.SKIN, defaultSteamItemParsePeriod);
                     steamItemRepository.saveAndFlush(skin);
                 } else {

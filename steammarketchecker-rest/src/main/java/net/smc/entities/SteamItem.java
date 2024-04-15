@@ -19,22 +19,20 @@ public class SteamItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Enumerated(EnumType.STRING)
+    @DefaultValue("SKIN")
+    private SteamItemType steamItemType;
     private String name;
     private Double minPrice;
-    private Double medianPrice;
     private Long parseQueueId;
     private Instant parseDate;
     private Integer parsePeriod; // in sec
     private boolean forceUpdate;
-    @Enumerated(EnumType.STRING)
-    @DefaultValue("SKIN")
-    private SteamItemType steamItemType;
 
     public SteamItem(SteamItemDto steamItemDto) {
         this.id = steamItemDto.getId();
         this.name = steamItemDto.getName();
         this.minPrice = steamItemDto.getMinPrice();
-        this.medianPrice = steamItemDto.getMedianPrice();
         this.parseQueueId = steamItemDto.getParseQueueId(); //todo появились вопросы к этой штуке - она вроде не нужна
         this.parseDate = steamItemDto.getParseDate();
         this.parsePeriod = steamItemDto.getParsePeriod();
@@ -42,10 +40,9 @@ public class SteamItem {
         this.steamItemType = steamItemDto.getSteamItemType();
     }
 
-    public SteamItem(String name, Double minPrice, Double medianPrice, SteamItemType steamItemType, Integer parsePeriod) {
+    public SteamItem(String name, Double minPrice, SteamItemType steamItemType, Integer parsePeriod) {
         this.name = name;
         this.minPrice = minPrice;
-        this.medianPrice = medianPrice;
         this.parseDate = Instant.now();
         this.steamItemType = steamItemType;
         this.parsePeriod = parsePeriod;
@@ -58,9 +55,8 @@ public class SteamItem {
         this.parsePeriod = parsePeriod;
     }
 
-    public void updateSteamItemPrices(Double minPrice, Double medianPrice) {
+    public void updateSteamItemPrices(Double minPrice) {
         this.setMinPrice(minPrice);
-        this.setMedianPrice(medianPrice);
         this.setParseDate(Instant.now());
         this.setParseQueueId(null);
     }

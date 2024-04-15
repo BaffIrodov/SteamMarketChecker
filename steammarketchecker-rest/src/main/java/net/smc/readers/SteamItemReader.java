@@ -6,10 +6,14 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import net.smc.dto.SteamItemDto;
 import net.smc.entities.QSteamItem;
+import net.smc.entities.SteamItem;
 import net.smc.enums.SteamItemType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +28,6 @@ public class SteamItemReader {
                 qSteamItem.id,
                 qSteamItem.name,
                 qSteamItem.minPrice,
-                qSteamItem.medianPrice,
                 qSteamItem.parseQueueId,
                 qSteamItem.parseDate,
                 qSteamItem.forceUpdate
@@ -45,10 +48,11 @@ public class SteamItemReader {
                 .fetch();
     }
 
-    public List<String> getAllSteamItemNamesByNameList(List<String> nameList) {
+    public Map<String, Long> getAllSteamItemIdByName(List<String> nameList) {
         return queryFactory.from(qSteamItem)
-                .select(qSteamItem.name)
+                .select(qSteamItem)
                 .where(qSteamItem.name.in(nameList))
-                .fetch();
+                .fetch().stream()
+                .collect(Collectors.toMap(SteamItem::getName, SteamItem::getId));
     }
 }

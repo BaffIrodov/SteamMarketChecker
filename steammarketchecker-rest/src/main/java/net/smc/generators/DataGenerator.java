@@ -102,10 +102,10 @@ public class DataGenerator {
             }
             lotRepository.saveAllAndFlush(lotList);
             for (int i = 0; i < skinCount; i++) {
-                skinList.add(new SteamItem("generatedSkinName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.SKIN, 10));
+                skinList.add(new SteamItem("generatedSkinName_" + (i + 1), (double) (i+1)*10, SteamItemType.SKIN, 10));
             }
             for (int i = 0; i < stickerCount; i++) {
-                stickerList.add(new SteamItem("generatedStickerName_" + (i + 1), (double) (i+1)*10, (double) (i+1)*10, SteamItemType.STICKER, 10));
+                stickerList.add(new SteamItem("generatedStickerName_" + (i + 1), (double) (i+1)*10, SteamItemType.STICKER, 10));
             }
             steamItemRepository.saveAllAndFlush(skinList);
             steamItemRepository.saveAllAndFlush(stickerList);
@@ -115,7 +115,7 @@ public class DataGenerator {
                 int randSkinIndex = random.nextInt(0, skinCount-1);
                 for (int i = 0; i < randStickerCount; i++) {
                     int randStickerIndex = random.nextInt(0, stickerCount-1);
-                    lotStickerList.add(new LotSticker(lot.getId(), stickerList.get(randStickerIndex)));
+                    lotStickerList.add(new LotSticker(lot.getId(), null, stickerList.get(randStickerIndex)));
                 }
                 lot.setSteamItem(skinList.get(randSkinIndex));
                 lot.setLotStickerList(lotStickerList);

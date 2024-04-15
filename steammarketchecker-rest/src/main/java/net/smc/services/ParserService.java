@@ -5,8 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.smc.common.CommonUtils;
 import net.smc.dto.dtofromjson.LotFromJsonDto;
+import net.smc.dto.dtofromjson.ParseResultForLot;
+import net.smc.dto.dtofromjson.ParseResultForSteamItem;
 import net.smc.dto.dtofromjson.SteamItemFromJsonDto;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +19,16 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ParserService {
     private final CommonUtils commonUtils;
 
-    public List<LotFromJsonDto> parseListingFromApi(String url) {
+    public ParseResultForLot parseListingFromApi(String url) {
         String listingJsonAsString = commonUtils.connectAndGetJsonAsString(url);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject listingJson = gson.fromJson(listingJsonAsString, JsonObject.class);
+        ParseResultForLot parseResultForLot = new ParseResultForLot();
         List<LotFromJsonDto> lotsWithStickers = new ArrayList<>();
         if (listingJson != null && listingJson.asMap().get("success").getAsBoolean()) {
             Map<String, JsonElement> map = listingJson.asMap().get("listinginfo").getAsJsonObject().asMap();
@@ -39,19 +44,28 @@ public class ParserService {
                     lotsWithStickers.add(lotFromJsonDto);
                 }
             });
+            parseResultForLot.setConnectSuccessful(true);
+            parseResultForLot.setLotWithStickersFromJsonDtoList(lotsWithStickers);
+        }  else {
+            log.error("Не удалось распарсить lot по юрлу: " + url);
         }
-        return lotsWithStickers;
+        return parseResultForLot;
     }
 
-    public SteamItemFromJsonDto parseSteamItemFromApi(String url) {
+    public ParseResultForSteamItem parseSteamItemFromApi(String url) {
+        ParseResultForSteamItem parseResultForSteamItem = new ParseResultForSteamItem();
         SteamItemFromJsonDto steamItemFromJsonDto = null;
         String priceOverviewJsonAsString = commonUtils.connectAndGetJsonAsString(url);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject priceOverviewJson = gson.fromJson(priceOverviewJsonAsString, JsonObject.class);
         if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()) {
             steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
+            parseResultForSteamItem.setConnectSuccessful(true);
+            parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
+        } else {
+            log.error("Не удалось распарсить steamItem по юрлу: " + url);
         }
-        return steamItemFromJsonDto;
+        return parseResultForSteamItem;
     }
 
 }

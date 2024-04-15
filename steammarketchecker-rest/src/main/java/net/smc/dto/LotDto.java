@@ -19,6 +19,7 @@ public class LotDto {
 
     private Long listingId;
     private Long assetId;
+    private String lotParseTarget;
 
     private SteamItemDto skin;
 
@@ -39,6 +40,7 @@ public class LotDto {
         this.id = lot.getId();
         this.listingId = lot.getListingId();
         this.assetId = lot.getAssetId();
+        this.lotParseTarget = lot.getLotParseTarget();
         this.skin = new SteamItemDto(lot.getSteamItem());
         lot.getLotStickerList().forEach(lotSticker -> {
             this.stickers.add(new SteamItemDto(lotSticker.getSteamSticker()));

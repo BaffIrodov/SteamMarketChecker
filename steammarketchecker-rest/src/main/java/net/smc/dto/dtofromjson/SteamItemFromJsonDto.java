@@ -11,12 +11,10 @@ import java.util.Map;
 @NoArgsConstructor
 public class SteamItemFromJsonDto {
     private Double minPrice;
-    private Double medianPrice;
 
     public SteamItemFromJsonDto(JsonObject jsonObject) {
         Map<String, JsonElement> mapSteamItemInfo = jsonObject.asMap();
         this.minPrice = Double.parseDouble(getDoubleParseReadyString(mapSteamItemInfo.get("lowest_price").getAsString()));
-        this.medianPrice = Double.parseDouble(getDoubleParseReadyString(mapSteamItemInfo.get("median_price").getAsString()));
     }
 
     private String getDoubleParseReadyString(String string) {

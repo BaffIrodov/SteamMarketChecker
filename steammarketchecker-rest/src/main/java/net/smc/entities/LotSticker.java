@@ -17,13 +17,15 @@ public class LotSticker {
 
     @Column(name = "lot_id")
     private Long lotId;
+    private String lotParseTarget;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stickerId")
     private SteamItem steamSticker;
 
-    public LotSticker(Long lotId, SteamItem steamSticker) {
+    public LotSticker(Long lotId, String lotParseTarget, SteamItem steamSticker) {
         this.lotId = lotId;
+        this.lotParseTarget = lotParseTarget;
         this.steamSticker = steamSticker;
     }
 

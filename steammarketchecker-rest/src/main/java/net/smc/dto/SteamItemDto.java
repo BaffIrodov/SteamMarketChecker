@@ -15,7 +15,6 @@ public class SteamItemDto {
     private Long id;
     private String name;
     private Double minPrice;
-    private Double medianPrice;
     private Long parseQueueId;
     private Instant parseDate;
     private Integer parsePeriod; // in sec
@@ -26,7 +25,6 @@ public class SteamItemDto {
         this.id = steamItem.getId();
         this.name = steamItem.getName();
         this.minPrice = steamItem.getMinPrice();
-        this.medianPrice = steamItem.getMedianPrice();
         this.parseQueueId = steamItem.getParseQueueId();
         this.parseDate = steamItem.getParseDate();
         this.parsePeriod = steamItem.getParsePeriod();

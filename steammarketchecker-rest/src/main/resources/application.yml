@@ -6,8 +6,8 @@ server:
 token:
   recover-clean-in-sec: "3600"
 default-parse-period:
-  steam-item: 60
-  active-name: 60
+  steam-item: 3600
+  active-name: 180
 scheduled:
   default: "25000"
   active-name: "1000"

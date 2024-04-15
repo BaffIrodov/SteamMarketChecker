@@ -22,6 +22,7 @@ public class LotService {
 
     public List<LotDto> getAllLots(Boolean onlyActual, Boolean onlyCompleteness, Boolean onlyProfitability) {
         // todo надо маппиться нормально - пока и так сойдет
+        // todo либо можно не получать всё сразу, а только по открытию диалога делать такой запрос
         List<LotDto> allLots = lotReader.getAllLots(onlyActual, onlyCompleteness, onlyProfitability);
         Map<Long, LotDto> mapLotDtoById = allLots.stream().collect(Collectors.toMap(LotDto::getId, e -> e));
         List<Lot> lots = lotRepository.findAllById(allLots.stream().map(LotDto::getId).toList());
@@ -34,4 +35,6 @@ public class LotService {
         });
         return allLots;
     }
+
+    // todo здесь нужен шедулер, который будет проверять completeness
 }

@@ -3,6 +3,7 @@ package net.smc.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.smc.dto.dtofromjson.LotFromJsonDto;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Lot {
 
     private Long listingId;
     private Long assetId;
+    private String lotParseTarget;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemId")
@@ -50,6 +52,16 @@ public class Lot {
         this.priceCalculatingDate = Instant.now();
     }
 
-    // конструктор на основе дто тут не нужен - эта сущность никогда не создается из дто
+    public Lot(String lotParseTarget, LotFromJsonDto lotFromJsonDto, SteamItem steamItem) {
+        this.lotParseTarget = lotParseTarget;
+        this.assetId = lotFromJsonDto.getAssetId();
+        this.listingId = lotFromJsonDto.getListingId();
+        this.convertedPrice = lotFromJsonDto.getConvertedPrice();
+        this.convertedFee = lotFromJsonDto.getConvertedFee();
+        this.stickersAsString = lotFromJsonDto.getStickersAsString();
+        this.steamItem = steamItem;
+    }
+
+    // конструктор на основе lotDto тут не нужен - эта сущность никогда не создается из дто
 
 }

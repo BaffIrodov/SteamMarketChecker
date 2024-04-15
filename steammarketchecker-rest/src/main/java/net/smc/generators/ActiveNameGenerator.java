@@ -32,7 +32,8 @@ public class ActiveNameGenerator {
 //            "FAMAS | Pulse (Factory New)",
 //            "FAMAS | Pulse (Minimal Wear)",
 //            "FAMAS | Pulse (Field-Tested)",
-            "FAMAS | Pulse (Well-Worn)"
+//            "FAMAS | Pulse (Well-Worn)"
+            "AWP | Electric Hive (Field-Tested)"
             );
 
     @Value("${generators.real-active-name}")

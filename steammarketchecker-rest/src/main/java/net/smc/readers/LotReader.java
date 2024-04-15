@@ -32,7 +32,6 @@ public class LotReader {
                         qSteamItem.id,
                         qSteamItem.name,
                         qSteamItem.minPrice,
-                        qSteamItem.medianPrice,
                         qSteamItem.parseQueueId,
                         qSteamItem.parseDate,
                         qSteamItem.forceUpdate,
