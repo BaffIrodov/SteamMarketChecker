@@ -28,7 +28,8 @@ public class ParseQueueReader {
                 qParseQueue.parseType,
                 qParseQueue.parseTarget,
                 qParseQueue.parseUrl,
-                qParseQueue.archive
+                qParseQueue.archive,
+                qParseQueue.attempt
         );
     }
 
