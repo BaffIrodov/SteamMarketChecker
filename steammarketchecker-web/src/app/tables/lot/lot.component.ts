@@ -35,13 +35,14 @@ export class LotComponent {
     { field: "skin.name", headerName: "Название айтема" },
     {
       field: "completeness",
-      headerName: "Все составляющие с актуальной ценой",
+      headerName: "Все цены известны",
       cellRenderer: (params: { completeness: any; }) => {
         return params.completeness ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
     {
-      field: "profitability", headerName: "Выгодная покупка", cellRenderer: (params: { profitability: any; }) => {
+      field: "profitability", headerName: "Выгодная покупка",
+      cellRenderer: (params: { profitability: any; }) => {
         return params.profitability ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
@@ -52,7 +53,7 @@ export class LotComponent {
     // },
     { field: "positionInListing", headerName: "Позиция в таблице" },
     {
-      field: "profit", headerName: "Чистый профит",
+      field: "profit", headerName: "Чистый профит (с комиссией)",
       cellRenderer: (data: { value: number }) => {
         return data.value ? data.value + (this.normalizeToCurrency ? " руб" : " УЕ стима") : "";
       }
@@ -145,11 +146,12 @@ export class LotComponent {
     this.rowData = await this.lotService.getAllLots(this.showOnlyActual, this.showOnlyCompleteness, this.showOnlyProfitability);
     this.rowData.forEach(lot => {
       if (!!lot.profit && !!lot.convertedPrice) {
-        lot.profitPercent = ((Math.abs(lot.profit) / lot.convertedPrice) * 100).toFixed(2) + "%";
+        lot.profitPercent = ((lot.profit / lot.convertedPrice) * 100).toFixed(2) + "%";
       }
       if (this.normalizeToCurrency && this.actualCurrencyRelation) {
         if (lot.convertedPrice) lot.convertedPrice = lot.convertedPrice / this.actualCurrencyRelation.relation;
         if (lot.realPrice) lot.realPrice = lot.realPrice / this.actualCurrencyRelation.relation;
+        if (lot.profit) lot.profit = lot.profit / this.actualCurrencyRelation.relation;
       }
       if (this.roundPrices) {
         if (lot.convertedPrice) lot.convertedPrice = Number.parseFloat(lot.convertedPrice.toFixed(0));
