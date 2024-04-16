@@ -30,12 +30,6 @@ export class LotComponent {
   roundPrices: boolean = true;
   itemsIdsWithZeroPrice: number[] = [];
 
-  getProfitPercent(): (params: ValueGetterParams) => string {
-    return (params: ValueGetterParams): string => {
-      return (params?.data?.profit / params?.data?.realPrice).toString();
-    };
-  }
-
   public columnDefs: ColDef[] = [
     // { field: "id", headerName: "Идентификатор" },
     { field: "skin.name", headerName: "Название айтема" },
@@ -150,8 +144,8 @@ export class LotComponent {
     this.agGrid.api.showLoadingOverlay();
     this.rowData = await this.lotService.getAllLots(this.showOnlyActual, this.showOnlyCompleteness, this.showOnlyProfitability);
     this.rowData.forEach(lot => {
-      if (!!lot.realPrice && !!lot.convertedPrice) {
-        lot.profitPercent = ((lot.realPrice - lot.convertedPrice) / lot.convertedPrice * 100).toFixed(2) + "%";
+      if (!!lot.profit && !!lot.convertedPrice) {
+        lot.profitPercent = ((Math.abs(lot.profit) / lot.convertedPrice) * 100).toFixed(2) + "%";
       }
       if (this.normalizeToCurrency && this.actualCurrencyRelation) {
         if (lot.convertedPrice) lot.convertedPrice = lot.convertedPrice / this.actualCurrencyRelation.relation;
