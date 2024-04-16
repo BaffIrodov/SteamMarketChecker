@@ -37,6 +37,7 @@ public class ParseQueueReader {
         return queryFactory.from(qParseQueue)
                 .select(getMappedSelectForParseQueueDto())
                 .where(archive ? qParseQueue.archive.isTrue() : qParseQueue.archive.isFalse())
+                .orderBy(qParseQueue.importance.desc(), qParseQueue.id.asc())
                 .fetch();
     }
 
