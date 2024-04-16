@@ -34,15 +34,30 @@ public class ActiveNameGenerator {
 //            "FAMAS | Pulse (Field-Tested)",
 //            "FAMAS | Pulse (Well-Worn)"
 //            "AWP | Electric Hive (Field-Tested)"
-            "AWP | Electric Hive (Factory New)",
-            "Desert Eagle | Oxide Blaze (Factory New)",
-            "AWP | Fever Dream (Factory New)",
-            "AWP | Electric Hive (Well-Worn)",
-            "M4A4 | X-Ray (Minimal Wear)",
-            "AWP | Corticera (Factory New)",
-            "AK-47 | Blue Laminate (Minimal Wear)",
-            "AWP | Electric Hive (Field-Tested)"
+
+
+            // это дорогие, их нужно по десятке фигачить
+//            "AWP | Electric Hive (Factory New)",
+//            "Desert Eagle | Oxide Blaze (Factory New)",
+//            "AWP | Fever Dream (Factory New)",
+//            "AWP | Electric Hive (Well-Worn)",
+//            "M4A4 | X-Ray (Minimal Wear)",
+//            "AWP | Corticera (Factory New)",
+//            "AK-47 | Blue Laminate (Minimal Wear)",
+//            "AWP | Electric Hive (Field-Tested)"
+
+
+            // это дешевые, можно по 50
+//            "AK-47 | Slate (Field-Tested)"
+
             );
+
+    private final List<String> activeNamesWithoutExterior = List.of(
+
+            // это дешевые, можно по 50
+            "AK-47 | Slate"
+//            "SG 553 | Dragon Tech"
+    );
 
     @Value("${generators.real-active-name}")
     private Boolean generatorRealActiveNameEnable;
@@ -58,8 +73,15 @@ public class ActiveNameGenerator {
             log.warn("ActiveName tables (real data) filled");
             for (String activeName : activeNames) {
                 activeNameRepository.save(
-                        new ActiveName(activeName, 10, defaultActiveNameParsePeriod)
+                        new ActiveName(activeName, 100, defaultActiveNameParsePeriod)
                 );
+            }
+            for (String activeNameWithoutExterior : activeNamesWithoutExterior) {
+                for (String exterior: exteriorList) {
+                    activeNameRepository.save(
+                            new ActiveName(activeNameWithoutExterior + " " + exterior, 100, defaultActiveNameParsePeriod)
+                    );
+                }
             }
         }
     }
