@@ -22,7 +22,7 @@ export class ParseQueueComponent {
   showArchive: boolean = false;
 
   public columnDefs: ColDef[] = [
-    { field: "id", headerName: "Идентификатор" },
+    // { field: "id", headerName: "Идентификатор" },
     { field: "importance", headerName: "Важность" },
     { field: "attempt", headerName: "Попытка" },
     { field: "parseType", headerName: "Тип парсинга" },

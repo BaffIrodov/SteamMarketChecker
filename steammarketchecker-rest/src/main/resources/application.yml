@@ -14,7 +14,7 @@ scheduled: # in ms
   parse-queue: "1000"
   steam-item: "1000"
   lot-profit: "10000"
-  actual-currency-relation: "3600000"
+  actual-currency-relation: "7200000"
 initialize:
   admin: true
   user: true

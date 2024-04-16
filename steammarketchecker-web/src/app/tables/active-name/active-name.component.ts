@@ -24,7 +24,7 @@ export class ActiveNameComponent {
   showArchive: boolean = false;
 
   public columnDefs: ColDef[] = [
-    { field: "id", headerName: "Идентификатор" },
+    // { field: "id", headerName: "Идентификатор" },
     { field: "itemName", headerName: "Название" },
     { field: "parseItemCount", headerName: "Количество айтемов для парсинга" },
     { field: "parsePeriod", headerName: "Период парсинга" },
