@@ -38,7 +38,7 @@ public class ActiveNameService {
     private final SteamItemReader steamItemReader;
     private final CommonUtils commonUtils;
 
-    @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
+//    @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
     public void parseActualActiveNamesByPeriod() {
         List<ActiveName> allActualActiveNames = activeNameRepository.findAllByArchive(false);
         List<ActiveName> allOutdatedActiveNames = new ArrayList<>();
@@ -79,7 +79,7 @@ public class ActiveNameService {
                 // (задача заведется, если задачи нет в очереди)
                 if (mapParseQueueByParseTargetForLot.get(activeName.getItemName() + "_lot") == null) {
                     activeName.processOutdatedActiveName(); // Исправили данные
-                    parseQueueList.add(new ParseQueue(0, ParseType.LOT, activeName.getItemName() + "_lot",
+                    parseQueueList.add(new ParseQueue(10, ParseType.LOT, activeName.getItemName() + "_lot",
                             activeName.getParseItemCount(), skin.getId(), commonUtils));
                 }
             }

@@ -62,6 +62,7 @@ public class Lot {
         this.stickersAsString = lotFromJsonDto.getStickersAsString();
         this.steamItem = steamItem;
         this.positionInListing = lotFromJsonDto.getPositionInListing();
+        this.parseDate = Instant.now();
     }
 
     // конструктор на основе lotDto тут не нужен - эта сущность никогда не создается из дто

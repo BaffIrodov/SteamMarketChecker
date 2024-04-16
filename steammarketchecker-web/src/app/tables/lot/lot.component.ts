@@ -7,6 +7,7 @@ import { HttpClient } from "@angular/common/http";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Lot } from "../../dto/Lot";
 import { LotService } from "../../services/lot.service";
+import { ActualCurrencyRelation } from "../../dto/ActualCurrencyRelation";
 
 @Component({
   selector: "app-lot",
@@ -15,13 +16,18 @@ import { LotService } from "../../services/lot.service";
 })
 export class LotComponent {
   selectedLot: Lot;
+  actualCurrencyRelation: ActualCurrencyRelation;
   dialogEditMode: boolean = false;
   filter: boolean = false;
   loading: boolean = false;
   showOnlyActual: boolean = false;
   showOnlyCompleteness: boolean = false;
   showOnlyProfitability: boolean = false;
-  openDialog: boolean = false;
+  openDetailingDialog: boolean = false;
+  openActualCurrencyRelationDialog: boolean = false;
+  hideDates: boolean = true;
+  normalizeToCurrency: boolean = true;
+  roundPrices: boolean = true;
   itemsIdsWithZeroPrice: number[] = [];
 
   getProfitPercent(): (params: ValueGetterParams) => string {
@@ -31,7 +37,7 @@ export class LotComponent {
   }
 
   public columnDefs: ColDef[] = [
-    { field: "id", headerName: "Идентификатор" },
+    // { field: "id", headerName: "Идентификатор" },
     { field: "skin.name", headerName: "Название айтема" },
     {
       field: "completeness",
@@ -45,18 +51,34 @@ export class LotComponent {
         return params.profitability ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
       }
     },
+    // {
+    //   field: "actual", headerName: "Актуально", cellRenderer: (params: { actual: any; }) => {
+    //     return params.actual ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
+    //   }
+    // },
+    { field: "positionInListing", headerName: "Позиция в таблице" },
     {
-      field: "actual", headerName: "Актуально", cellRenderer: (params: { actual: any; }) => {
-        return params.actual ? `<input disabled="true" type="checkbox" checked />` : `<input disabled="true" type="checkbox" />`;
+      field: "profit", headerName: "Чистый профит",
+      cellRenderer: (data: { value: number }) => {
+        return data.value ? data.value + (this.normalizeToCurrency ? " руб" : " УЕ стима") : "";
       }
     },
-    { field: "profit", headerName: "Чистый профит" },
-    { valueGetter: this.getProfitPercent, headerName: "Профит в процентах" },
-    { field: "convertedPrice", headerName: "Конвертированная цена" },
-    { field: "realPrice", headerName: "Реальная цена" },
+    { field: "profitPercent", headerName: "Профит в процентах" },
+    {
+      field: "convertedPrice", headerName: "Конвертированная цена",
+      cellRenderer: (data: { value: number }) => {
+        return data.value ? data.value + (this.normalizeToCurrency ? " руб" : " УЕ стима") : "";
+      }
+    },
+    {
+      field: "realPrice", headerName: "Реальная цена", cellRenderer: (data: { value: number }) => {
+        return data.value ? data.value + (this.normalizeToCurrency ? " руб" : " УЕ стима") : "";
+      }
+    },
     {
       field: "priceCalculatingDate",
       headerName: "Дата последнего расчета стоимости",
+      hide: this.hideDates,
       cellRenderer: (data: { value: number }) => {
         return data.value ? (new Date(data.value * 1000)).toLocaleString() : "";
       }
@@ -64,6 +86,7 @@ export class LotComponent {
     {
       field: "parseDate",
       headerName: "Дата последнего парсинга",
+      hide: this.hideDates,
       cellRenderer: (data: { value: number }) => {
         return data.value ? (new Date(data.value * 1000)).toLocaleString() : "";
       }
@@ -103,6 +126,7 @@ export class LotComponent {
 
   async ngOnInit() {
     this.loading = true;
+    await this.getActualCurrencyRelation();
   }
 
   showFilter() {
@@ -125,6 +149,20 @@ export class LotComponent {
   async getAllLots() {
     this.agGrid.api.showLoadingOverlay();
     this.rowData = await this.lotService.getAllLots(this.showOnlyActual, this.showOnlyCompleteness, this.showOnlyProfitability);
+    this.rowData.forEach(lot => {
+      if (!!lot.realPrice && !!lot.convertedPrice) {
+        lot.profitPercent = ((lot.realPrice - lot.convertedPrice) / lot.convertedPrice * 100).toFixed(2) + "%";
+      }
+      if (this.normalizeToCurrency && this.actualCurrencyRelation) {
+        if (lot.convertedPrice) lot.convertedPrice = lot.convertedPrice / this.actualCurrencyRelation.relation;
+        if (lot.realPrice) lot.realPrice = lot.realPrice / this.actualCurrencyRelation.relation;
+      }
+      if (this.roundPrices) {
+        if (lot.convertedPrice) lot.convertedPrice = Number.parseFloat(lot.convertedPrice.toFixed(0));
+        if (lot.realPrice) lot.realPrice = Number.parseFloat(lot.realPrice.toFixed(0));
+        if (lot.profit) lot.profit = Number.parseFloat(lot.profit.toFixed(0));
+      }
+    });
     this.loading = false;
   }
 
@@ -140,23 +178,38 @@ export class LotComponent {
 
   getLabelForDetailButton(): string {
     if (this.selectedLot && this.selectedLot?.stickers) {
-      return 'Подробности (стикеров: ' + this.selectedLot?.stickers?.length + ')';
+      return "Подробности (стикеров: " + this.selectedLot?.stickers?.length + ")";
     }
-    return 'Подробности';
+    return "Подробности";
   }
 
-  async checkboxPressed() {
+  getLabelForCurrencyButton(): string {
+    if (!this.actualCurrencyRelation) {
+      return "Связь валюты (нет актуального значения)";
+    }
+    return "Связь валюты";
+  }
+
+  async getActualCurrencyRelation() {
+    this.actualCurrencyRelation = await this.lotService.getActualCurrencyRelation();
+  }
+
+  async checkboxQueryParametersPressed() {
     await this.getAllLots();
   }
 
-  async onDialogSubmit($event: any) {
-    this.openDialog = false;
+  async onDetailingDialogSubmit($event: any) {
+    this.openDetailingDialog = false;
+  }
+
+  async onCurrencyDialogSubmit($event: any) {
+    this.openActualCurrencyRelationDialog = false;
   }
 
   getAllLotsWithZeroPriceItems() {
     const lotsWithZeroPriceItems = this.rowData?.filter(e => {
       return ((e.skin.minPrice == 0))
-        || (e.stickers.find(r => r.minPrice == 0) != undefined)
+        || (e.stickers.find(r => r.minPrice == 0) != undefined);
     });
     this.itemsIdsWithZeroPrice = lotsWithZeroPriceItems?.map(e => e.id);
     return !!lotsWithZeroPriceItems && lotsWithZeroPriceItems.length > 0;

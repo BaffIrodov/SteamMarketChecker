@@ -45,7 +45,7 @@ public class ParseQueueService {
     private final LotStickerRepository lotStickerRepository;
     private final ParserService parserService;
 
-    @Scheduled(fixedDelayString = "${scheduled.parse-queue}", initialDelay = 1000)
+//    @Scheduled(fixedDelayString = "${scheduled.parse-queue}", initialDelay = 1000)
     public void parseActiveNamesByPeriod() {
         List<ParseQueue> allActualParseQueues = parseQueueRepository.findAllByArchiveOrderByImportanceDescIdAsc(false);
         if (allActualParseQueues.size() > 0) {
@@ -145,7 +145,7 @@ public class ParseQueueService {
         List<String> result = new ArrayList<>();
         if (Arrays.stream(stringArray).anyMatch(e -> e.contains("Champion"))) {
             for (int i = 0; i < stringArray.length; i++) {
-                if (stringArray[i].contains("Champion")) {
+                if (stringArray[i].contains("Champion") && !stringArray[i].contains(" (")) {
                     result.remove(stringArray[i-1]);
                     result.add(stringArray[i-1] + ", " + stringArray[i]);
                 } else {
@@ -196,7 +196,8 @@ public class ParseQueueService {
     private void putQueueAside(ParseQueue oneActualQueue) {
         oneActualQueue.setAttempt(oneActualQueue.getAttempt() + 1);
         //Понизим приоритет - чтобы одна очередь не занимала всё
-        oneActualQueue.setImportance(oneActualQueue.getImportance() - 1);
+        // todo - возможно, так делать не стоит - лоты улетают в небытие
+//        oneActualQueue.setImportance(oneActualQueue.getImportance() - 1);
         if (oneActualQueue.getAttempt() > maxQueueAttempts) {
             parseQueueRepository.delete(oneActualQueue);
         } else {

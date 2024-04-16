@@ -35,22 +35,30 @@ public class ParserService {
         if (listingJson != null && listingJson.asMap().get("success").getAsBoolean()) {
             Map<String, JsonElement> map = listingJson.asMap().get("listinginfo").getAsJsonObject().asMap();
             map.values().forEach(jsonElement -> {
-                LotFromJsonDto lotFromJsonDto = new LotFromJsonDto(jsonElement);
-                String assetDescriptions = listingJson.asMap().get("assets").getAsJsonObject().asMap()
-                        .get("730").getAsJsonObject().asMap().get("2").getAsJsonObject().asMap()
-                        .get(lotFromJsonDto.getAssetId().toString()).getAsJsonObject().asMap().get("descriptions").toString();
-                if (assetDescriptions.contains("Sticker")) {
-                    String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Sticker).{9}", "")
-                            .replaceAll("</center>.*", "");
-                    lotFromJsonDto.setStickersAsString(stickersAsString);
-                    lotFromJsonDto.setPositionInListing(positionInListing.get());
-                    lotsWithStickers.add(lotFromJsonDto);
+                if (jsonElement.getAsJsonObject().asMap().get("listingid") != null //может забаговаться одна цена какая-нибудь, тогда весь лот отлетит с ошибкой
+                        && jsonElement.getAsJsonObject().asMap().get("price") != null
+                        && jsonElement.getAsJsonObject().asMap().get("fee") != null
+                        && jsonElement.getAsJsonObject().asMap().get("converted_price") != null
+                        && jsonElement.getAsJsonObject().asMap().get("converted_fee") != null
+                        && jsonElement.getAsJsonObject().asMap().get("asset") != null
+                ) {
+                    LotFromJsonDto lotFromJsonDto = new LotFromJsonDto(jsonElement);
+                    String assetDescriptions = listingJson.asMap().get("assets").getAsJsonObject().asMap()
+                            .get("730").getAsJsonObject().asMap().get("2").getAsJsonObject().asMap()
+                            .get(lotFromJsonDto.getAssetId().toString()).getAsJsonObject().asMap().get("descriptions").toString();
+                    if (assetDescriptions.contains("Sticker")) {
+                        String stickersAsString = assetDescriptions.replaceAll(".*(?=.*Sticker).{9}", "")
+                                .replaceAll("</center>.*", "");
+                        lotFromJsonDto.setStickersAsString(stickersAsString);
+                        lotFromJsonDto.setPositionInListing(positionInListing.get());
+                        lotsWithStickers.add(lotFromJsonDto);
+                    }
                 }
                 positionInListing.getAndIncrement();
             });
             parseResultForLot.setConnectSuccessful(true);
             parseResultForLot.setLotWithStickersFromJsonDtoList(lotsWithStickers);
-        }  else {
+        } else {
             log.error("Не удалось распарсить lot по юрлу: " + url);
         }
         return parseResultForLot;

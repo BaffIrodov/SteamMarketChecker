@@ -44,7 +44,7 @@ public class ActualCurrencyRelationService {
     @Value("${scheduled.parse-queue}")
     private Integer parseScheduleDuration;
 
-    @Scheduled(fixedDelayString = "${scheduled.actual-currency-relation}", initialDelay = 1000)
+//    @Scheduled(fixedDelayString = "${scheduled.actual-currency-relation}", initialDelay = 1000)
     public void parseActualCurrencyRelationByPeriod() {
         List<Double> convertedPrices = new ArrayList<>();
         List<Double> minPrices = new ArrayList<>();

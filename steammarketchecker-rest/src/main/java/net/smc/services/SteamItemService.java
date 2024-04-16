@@ -34,7 +34,7 @@ public class SteamItemService {
     private final ParseQueueReader parseQueueReader;
     private final CommonUtils commonUtils;
 
-    @Scheduled(fixedDelayString = "${scheduled.steam-item}", initialDelay = 1000)
+//    @Scheduled(fixedDelayString = "${scheduled.steam-item}", initialDelay = 1000)
     public void parseActualSteamItemsByPeriod() {
         List<SteamItem> allActualSteamItems = steamItemRepository.findAll(); // все steamItem должны быть актуальными
         List<SteamItem> allOutdatedSteamItems = new ArrayList<>();

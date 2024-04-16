@@ -21,17 +21,34 @@
   ></p-button>
 
   <p-button
+    [label]="getLabelForCurrencyButton()"
+    icon="pi pi-dollar"
+    styleClass="p-button-rounded p-button-error p-button-outlined"
+    (click)="this.openActualCurrencyRelationDialog = true"
+  ></p-button>
+
+  <p-button
+    *ngIf="this.selectedLot"
     [label]="getLabelForDetailButton()"
     styleClass="p-button-outlined p-button-warning"
-    (onClick)="this.openDialog = true;"
+    (onClick)="this.openDetailingDialog = true;"
   ></p-button>
+
+  <p-checkbox
+    *ngIf="!!actualCurrencyRelation"
+    label="Привести цены к валюте"
+    inputId="binary"
+    [binary]="true"
+    [(ngModel)]="normalizeToCurrency"
+    (ngModelChange)="checkboxQueryParametersPressed()"
+  ></p-checkbox>
 
   <p-checkbox
     label="Показать только актуальные"
     inputId="binary"
     [binary]="true"
     [(ngModel)]="showOnlyActual"
-    (ngModelChange)="checkboxPressed()"
+    (ngModelChange)="checkboxQueryParametersPressed()"
   ></p-checkbox>
 
   <p-checkbox
@@ -39,7 +56,7 @@
     inputId="binary"
     [binary]="true"
     [(ngModel)]="showOnlyCompleteness"
-    (ngModelChange)="checkboxPressed()"
+    (ngModelChange)="checkboxQueryParametersPressed()"
   ></p-checkbox>
 
   <p-checkbox
@@ -47,7 +64,14 @@
     inputId="binary"
     [binary]="true"
     [(ngModel)]="showOnlyProfitability"
-    (ngModelChange)="checkboxPressed()"
+    (ngModelChange)="checkboxQueryParametersPressed()"
+  ></p-checkbox>
+
+  <p-checkbox
+    label="Скрыть даты"
+    inputId="binary"
+    [binary]="true"
+    [(ngModel)]="hideDates"
   ></p-checkbox>
 
 </p-toolbar>
@@ -73,8 +97,14 @@
   <div *ngIf="loading" class="loading">Загрузка...</div>
 </ng-container>
 
-<app-lot-detailing-dialog [openDialog]="openDialog"
-                          *ngIf="openDialog"
+<app-lot-detailing-dialog [openDialog]="openDetailingDialog"
+                          *ngIf="openDetailingDialog"
                           [lot]="selectedLot"
-                          (submit)="onDialogSubmit($event)"
+                          (submit)="onDetailingDialogSubmit($event)"
 ></app-lot-detailing-dialog>
+
+<app-actual-currency-relation-dialog [openDialog]="openActualCurrencyRelationDialog"
+                          *ngIf="openActualCurrencyRelationDialog"
+                          [actualCurrencyRelation]="actualCurrencyRelation"
+                          (submit)="onCurrencyDialogSubmit($event)"
+></app-actual-currency-relation-dialog>

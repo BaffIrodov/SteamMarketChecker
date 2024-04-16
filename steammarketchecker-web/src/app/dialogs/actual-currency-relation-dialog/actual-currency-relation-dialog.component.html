@@ -1,0 +1,22 @@
+<app-dialog *ngIf="visible"
+            [visible]="visible"
+            [selectedItem]="actualCurrencyRelation"
+            [title]="dialogTitle"
+            [hideSaveButton]="true"
+            [customDialogStyle]="{height: '31vh',width: '25vw'}"
+            (submit)="onSubmit($event)"
+>
+  <div>
+    <app-dialog-row [(item)]="'Условная единица стима:\n' + actualCurrencyRelation.convertedPrice"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+
+    <app-dialog-row [(item)]="'Валюта:\n' + actualCurrencyRelation.currencyPrice"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+
+    <app-dialog-row [(item)]="'Отношение (УЕ деленная на валюту):\n' + actualCurrencyRelation.relation"
+                    [disabled]="true"
+                    type="string"></app-dialog-row>
+  </div>
+</app-dialog>

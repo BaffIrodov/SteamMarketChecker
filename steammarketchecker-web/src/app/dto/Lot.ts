@@ -10,12 +10,14 @@ export class Lot {
   profitability: boolean;
   actual: boolean;
   profit: number;
+  profitPercent: string;
   convertedPrice: number;
   convertedFee: number;
   realPrice: number;
   priceCalculatingDate: number;
   parseDate: number;
   stickersAsString: string;
+  positionInListing: number;
 
   constructor() {
   }

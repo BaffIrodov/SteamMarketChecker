@@ -30,14 +30,17 @@ public class SteamItemReader {
                 qSteamItem.minPrice,
                 qSteamItem.parseQueueId,
                 qSteamItem.parseDate,
-                qSteamItem.forceUpdate
-        );
+                qSteamItem.parsePeriod,
+                qSteamItem.forceUpdate,
+                qSteamItem.steamItemType
+                );
     }
 
     public List<SteamItemDto> getAllSteamItems(SteamItemType steamItemType) {
         return queryFactory.from(qSteamItem)
                 .select(getMappedSelectForSteamItemDto())
                 .where(qSteamItem.steamItemType.eq(steamItemType))
+                .orderBy(qSteamItem.minPrice.desc().nullsLast())
                 .fetch();
     }
 

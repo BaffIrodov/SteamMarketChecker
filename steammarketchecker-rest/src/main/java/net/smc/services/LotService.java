@@ -48,7 +48,7 @@ public class LotService {
         return actualCurrencyRelationReader.getActualCurrencyRelationDto();
     }
 
-    @Scheduled(fixedDelayString = "${scheduled.lot-profit}", initialDelay = 1000)
+//    @Scheduled(fixedDelayString = "${scheduled.lot-profit}", initialDelay = 1000)
     public void calculateLotProfit() {
         List<ActualCurrencyRelation> actualCurrencyRelations = actualCurrencyRelationRepository.findAllByArchive(false);
         if (actualCurrencyRelations != null && actualCurrencyRelations.size() == 1) {
@@ -67,7 +67,7 @@ public class LotService {
                                         + (lot.getLotStickerList().stream().map(e -> e.getSteamSticker().getMinPrice() * currencyRelation.getRelation())
                                         .mapToDouble(e -> e).sum() / 10)
                         );
-                        lot.setProfit(((lot.getRealPrice() * 0.85) - lot.getConvertedPrice()) / currencyRelation.getRelation());
+                        lot.setProfit(((lot.getRealPrice() * 0.85) - lot.getConvertedPrice()));
                         lot.setProfitability(lot.getProfit() > 0);
                         lot.setPriceCalculatingDate(Instant.now());
                     }

@@ -1,4 +1,8 @@
-<p-dialog class="dialog" [header]="tittle" [(visible)]="visible" [modal]="true" [style]="{height: '80vh',width: '50vw'}"
+<p-dialog class="dialog"
+          [header]="title"
+          [modal]="true"
+          [style]="customDialogStyle ? customDialogStyle : {height: '80vh',width: '50vw'}"
+          [(visible)]="visible"
           (onHide)="closeDialog(false)">
 
     <form #f="ngForm"  novalidate>
@@ -7,7 +11,7 @@
         </div>
     </form>
 
-    <p-footer>
+    <p-footer *ngIf="!hideSaveButton">
         <div class="flex justify-content-center">
             <p-button icon="pi pi-check"
                 (click)="save()"

@@ -11,7 +11,7 @@ default-parse-period: # in sec
 scheduled: # in ms
   default: "25000"
   active-name: "1000"
-  parse-queue: "5000"
+  parse-queue: "1000"
   steam-item: "1000"
   lot-profit: "10000"
   actual-currency-relation: "3600000"
@@ -26,14 +26,14 @@ default-user:
 generators:
   message: false
   active-name: false
-  real-active-name: true
+  real-active-name: false
   parse-queue: false
   lot-with-steam-items: false
 truncate-table:
   active-name: false
-  parse-queue: true
-  lot: true
-  lot-sticker: true
-  steam-item: true
+  parse-queue: false
+  lot: false
+  lot-sticker: false
+  steam-item: false
 queue:
   max-attempts: 5

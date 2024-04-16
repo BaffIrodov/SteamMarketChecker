@@ -62,6 +62,7 @@ import { SteamItemComponent } from './tables/steam-item/steam-item.component';
 import { LotComponent } from './tables/lot/lot.component';
 import { ParseQueueComponent } from './tables/parse-queue/parse-queue.component';
 import { LotDetailingDialogComponent } from './dialogs/lot-detailing-dialog/lot-detailing-dialog.component';
+import { ActualCurrencyRelationDialogComponent } from './dialogs/actual-currency-relation-dialog/actual-currency-relation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { LotDetailingDialogComponent } from './dialogs/lot-detailing-dialog/lot-
     SteamItemComponent,
     LotComponent,
     ParseQueueComponent,
-    LotDetailingDialogComponent
+    LotDetailingDialogComponent,
+    ActualCurrencyRelationDialogComponent
   ],
   imports: [
     BrowserModule,

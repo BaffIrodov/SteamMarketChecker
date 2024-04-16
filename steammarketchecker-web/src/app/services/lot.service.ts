@@ -9,6 +9,7 @@ import { DefaultChild } from "../dto/DefaultChild";
 import { ActiveName } from "../dto/ActiveName";
 import { SteamItem, SteamItemType } from "../dto/SteamItem";
 import { Lot } from "../dto/Lot";
+import { ActualCurrencyRelation } from "../dto/ActualCurrencyRelation";
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,10 @@ export class LotService extends BaseService {
         onlyProfitability: onlyProfitability
       }
     }));
+  }
+
+  async getActualCurrencyRelation() {
+    const url = await this.getBackendUrl();
+    return await firstValueFrom(this.http.get<ActualCurrencyRelation>(url + `/${this.path}/currency`));
   }
 }

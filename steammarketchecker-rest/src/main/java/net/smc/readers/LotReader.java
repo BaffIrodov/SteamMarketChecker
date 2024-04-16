@@ -45,7 +45,8 @@ public class LotReader {
                 qLot.realPrice,
                 qLot.priceCalculatingDate,
                 qLot.parseDate,
-                qLot.stickersAsString
+                qLot.stickersAsString,
+                qLot.positionInListing
         );
     }
 
@@ -55,6 +56,7 @@ public class LotReader {
                 .where(onlyActual ? qLot.actual.isTrue() : null)
                 .where(onlyCompleteness ? qLot.completeness.isTrue() : null)
                 .where(onlyProfitability ? qLot.profitability.isTrue() : null)
+                .orderBy(qLot.profit.desc().nullsLast())
                 .fetch();
     }
 

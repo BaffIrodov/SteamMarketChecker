@@ -12,8 +12,10 @@ export class DialogComponent implements OnInit {
 
     @Input("visible") visible: any = false;
     @Input("selectedItem") selectedItem: any;
-    @Input("title") tittle: string;
+    @Input("title") title: string;
     @Input("editMode") editMode: boolean = false;
+    @Input("hideSaveButton") hideSaveButton: boolean = false;
+    @Input("customDialogStyle") customDialogStyle: any;
     @Output() submit = new EventEmitter<any>();
 
     constructor(public messageService: MessageService) {

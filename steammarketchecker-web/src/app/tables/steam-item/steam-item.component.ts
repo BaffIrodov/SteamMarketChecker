@@ -21,8 +21,7 @@ export class SteamItemComponent {
   showSkins: boolean = false;
 
   public columnDefs: ColDef[] = [
-    { field: "id", headerName: "Идентификатор" },
-    { field: "steamItemId", headerName: "Идентификатор стима для айтема" },
+    // { field: "id", headerName: "Идентификатор" },
     { field: "name", headerName: "Название айтема" },
     { field: "minPrice", headerName: "Минимальная цена" },
     {
