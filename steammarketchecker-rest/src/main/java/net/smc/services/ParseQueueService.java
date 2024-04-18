@@ -130,7 +130,6 @@ public class ParseQueueService {
                 LotSticker lotSticker = new LotSticker(lot.getId(), lot.getLotParseTarget(), mapStickerById.get(stickerId));
                 lotStickers.add(lotSticker);
             } else { // Иначе - создаем новую запись в бд с таким стикером. Затем создаем соответствующий lotSticker.
-                // todo тут нужно настраивать importance
                 SteamItem newSticker = new SteamItem(stickerName + "_sticker", SteamItemType.STICKER, defaultSteamItemParsePeriod);
                 steamItemRepository.saveAndFlush(newSticker);
                 // Так как может возникнуть ситуация, когда в одном скине одинаковые стикеры,

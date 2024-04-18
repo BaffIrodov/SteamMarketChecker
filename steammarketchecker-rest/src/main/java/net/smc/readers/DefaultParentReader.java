@@ -36,7 +36,7 @@ public class DefaultParentReader {
                 .fetchFirst();
     }
 
-    // todo доделать
+
     public DefaultParentDto getDefaultParentWithDefaultChildren(Long positionId) {
         return queryFactory.from(defaultParent)
                 .leftJoin(defaultChild).on(defaultChild.defaultParentId.eq(defaultParent.id))
