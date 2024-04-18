@@ -34,7 +34,7 @@ public class SteamItemService {
     private final ParseQueueReader parseQueueReader;
     private final CommonUtils commonUtils;
 
-//    @Scheduled(fixedDelayString = "${scheduled.steam-item}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${scheduled.steam-item}", initialDelay = 1000)
     public void parseActualSteamItemsByPeriod() {
         List<SteamItem> allActualSteamItems = steamItemRepository.findAll(); // все steamItem должны быть актуальными
         List<SteamItem> allOutdatedSteamItems = new ArrayList<>();
@@ -47,7 +47,7 @@ public class SteamItemService {
             }
         }
         // Для всех steamItems, которые требуют обновления, заводим задачу в очереди.
-        // И исправляем данные, из-за которых они outdated
+        // Данные, из-за которых они outdated, исправляются внутри очереди
         if (allOutdatedSteamItems.size() > 0) {
             List<ParseQueue> parseQueueList = new ArrayList<>();
             Map<String, ParseQueueDto> mapParseQueueByParseTargetForSkin = parseQueueReader.getMapQueueByTarget(
@@ -56,8 +56,7 @@ public class SteamItemService {
                 // Завели задачу в очереди на скин
                 // (задача заведется, если задачи нет в очереди)
                 if (mapParseQueueByParseTargetForSkin.get(steamItem.getName()) == null) {
-                    steamItem.processOutdatedSteamItem(); // Исправили данные
-                    parseQueueList.add(new ParseQueue(0, ParseType.valueOf(steamItem.getSteamItemType().toString()),
+                    parseQueueList.add(new ParseQueue(steamItem.getSteamItemType() == SteamItemType.SKIN ? 6 : 0, ParseType.valueOf(steamItem.getSteamItemType().toString()),
                             steamItem.getName(), 0, null, commonUtils));
                 }
             }
