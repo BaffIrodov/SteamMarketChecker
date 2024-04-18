@@ -1,6 +1,7 @@
 package net.smc.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.smc.dto.ParseQueueDto;
 import net.smc.dto.dtofromjson.LotFromJsonDto;
 import net.smc.dto.dtofromjson.ParseResultForLot;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ParseQueueService {
 
     @Value("${queue.max-attempts}")
@@ -45,15 +47,13 @@ public class ParseQueueService {
     private final LotStickerRepository lotStickerRepository;
     private final ParserService parserService;
 
-//    @Scheduled(fixedDelayString = "${scheduled.parse-queue}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${scheduled.parse-queue}", initialDelay = 1000)
     public void parseActiveNamesByPeriod() {
         List<ParseQueue> allActualParseQueues = parseQueueRepository.findAllByArchiveOrderByImportanceDescIdAsc(false);
         if (allActualParseQueues.size() > 0) {
             ParseQueue oneActualQueue = allActualParseQueues.get(0);
             switch (oneActualQueue.getParseType()) {
                 case LOT -> {
-                    // данные про старые лоты с таким же названием должны быть удалены
-                    deleteOldLotsIfNeeded(oneActualQueue);
                     // парсим новые данные на это название
                     lotParsing(oneActualQueue);
                 }
@@ -77,6 +77,8 @@ public class ParseQueueService {
         List<LotFromJsonDto> lotsWithStickers = parseResultForLot.getLotWithStickersFromJsonDtoList();
         // Проверяем, успешен ли ответ
         if (parseResultForLot.isConnectSuccessful()) {
+            // данные про старые лоты с таким же названием должны быть удалены
+            deleteOldLotsIfNeeded(oneActualQueue);
             // Проверяем, что данные пришли нормальные (непустой список)
             // (коннект может быть удачным, но с пустым списком - это нормальная ситуация, ничего не делаем)
             if (lotsWithStickers != null && !lotsWithStickers.isEmpty()) {
@@ -100,8 +102,10 @@ public class ParseQueueService {
             // если всё успешно
             oneActualQueue.setArchive(true);
             parseQueueRepository.saveAndFlush(oneActualQueue);
+            System.out.println(String.format("ParseQueue with id %s. Success!", oneActualQueue.getId()));
         } else { // Иначе произошел сбой - откладываем задачу на потом
             putQueueAside(oneActualQueue);
+            System.out.println(String.format("ParseQueue with id %s. Fail", oneActualQueue.getId()));
         }
     }
 
@@ -188,8 +192,10 @@ public class ParseQueueService {
             // если всё успешно
             oneActualQueue.setArchive(true);
             parseQueueRepository.saveAndFlush(oneActualQueue);
+            System.out.println(String.format("ParseQueue with id %s. Success!", oneActualQueue.getId()));
         } else { // Иначе произошел сбой - откладываем задачу на потом
             putQueueAside(oneActualQueue);
+            System.out.println(String.format("ParseQueue with id %s. Fail", oneActualQueue.getId()));
         }
     }
 
@@ -197,7 +203,7 @@ public class ParseQueueService {
         oneActualQueue.setAttempt(oneActualQueue.getAttempt() + 1);
         //Понизим приоритет - чтобы одна очередь не занимала всё
         // todo - возможно, так делать не стоит - лоты улетают в небытие
-//        oneActualQueue.setImportance(oneActualQueue.getImportance() - 1);
+        oneActualQueue.setImportance(oneActualQueue.getImportance() - 1);
         if (oneActualQueue.getAttempt() > maxQueueAttempts) {
             parseQueueRepository.delete(oneActualQueue);
         } else {
