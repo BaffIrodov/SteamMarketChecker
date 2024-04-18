@@ -23,7 +23,7 @@ public class CommonUtils {
     }
 
     public String defaultStringConverter(String unconvertedString) {
-        return unconvertedString.replaceAll(" ", "%20").replaceAll("\\|", "%7C")
+        return unconvertedString.replaceAll("™", "%E2%84%A2").replaceAll(" ", "%20").replaceAll("\\|", "%7C")
                 .replaceAll("\\(", "%28").replaceAll("\\)", "%29");
     }
 
