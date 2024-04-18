@@ -32,7 +32,8 @@ public class ParserService {
         JsonObject listingJson = gson.fromJson(listingJsonAsString, JsonObject.class);
         ParseResultForLot parseResultForLot = new ParseResultForLot();
         List<LotFromJsonDto> lotsWithStickers = new ArrayList<>();
-        if (listingJson != null && listingJson.asMap().get("success").getAsBoolean()) {
+        if (listingJson != null && listingJson.asMap().get("success").getAsBoolean()
+                && listingJson.asMap().get("listinginfo").isJsonObject()) {
             Map<String, JsonElement> map = listingJson.asMap().get("listinginfo").getAsJsonObject().asMap();
             map.values().forEach(jsonElement -> {
                 if (jsonElement.getAsJsonObject().asMap().get("listingid") != null //может забаговаться одна цена какая-нибудь, тогда весь лот отлетит с ошибкой
