@@ -48,7 +48,7 @@ public class LotService {
         return actualCurrencyRelationReader.getActualCurrencyRelationDto();
     }
 
-//    @Scheduled(fixedDelayString = "${scheduled.lot-profit}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${scheduled.lot-profit}", initialDelay = 1000)
     public void calculateLotProfit() {
         List<ActualCurrencyRelation> actualCurrencyRelations = actualCurrencyRelationRepository.findAllByArchive(false);
         if (actualCurrencyRelations != null && actualCurrencyRelations.size() == 1) {

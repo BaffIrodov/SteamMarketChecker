@@ -38,7 +38,7 @@ public class ActiveNameService {
     private final SteamItemReader steamItemReader;
     private final CommonUtils commonUtils;
 
-//    @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${scheduled.active-name}", initialDelay = 1000)
     public void parseActualActiveNamesByPeriod() {
         List<ActiveName> allActualActiveNames = activeNameRepository.findAllByArchive(false);
         List<ActiveName> allOutdatedActiveNames = new ArrayList<>();
