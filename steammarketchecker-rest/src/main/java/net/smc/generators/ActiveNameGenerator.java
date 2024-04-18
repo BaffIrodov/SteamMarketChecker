@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.smc.entities.ActiveName;
 import net.smc.repositories.ActiveNameRepository;
+import net.smc.repositories.LotRepository;
+import net.smc.repositories.LotStickerRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,8 @@ public class ActiveNameGenerator {
     private Integer defaultActiveNameParsePeriod;
 
     private final ActiveNameRepository activeNameRepository;
+    private final LotRepository lotRepository;
+    private final LotStickerRepository lotStickerRepository;
 
     private final List<String> exteriorList = List.of(
             "(Factory New)",
@@ -47,15 +51,24 @@ public class ActiveNameGenerator {
 //            "AWP | Electric Hive (Field-Tested)"
 
 
-            // это дешевые, можно по 50
+            // это дешевые, можно по 100
+            "StatTrak™ AK-47 | Blue Laminate (Factory New)",
+            "AK-47 | Blue Laminate (Factory New)",
+            "StatTrak™ AK-47 | Blue Laminate (Minimal Wear)",
+            "AK-47 | Blue Laminate (Minimal Wear)",
+            "StatTrak™ AWP | Fever Dream (Factory New)",
+            "AWP | Fever Dream (Factory New)",
+            "StatTrak™ AWP | Fever Dream (Minimal Wear)",
+            "AWP | Fever Dream (Minimal Wear)"
 //            "AK-47 | Slate (Field-Tested)"
 
-            );
+    );
 
     private final List<String> activeNamesWithoutExterior = List.of(
 
-            // это дешевые, можно по 50
-            "AK-47 | Slate"
+            // это дешевые, можно по 100
+//            "AK-47 | Blue Laminate"
+//            "AK-47 | Slate"
 //            "SG 553 | Dragon Tech"
     );
 
@@ -70,19 +83,22 @@ public class ActiveNameGenerator {
     public void generateRealActiveNames() {
         if (generatorRealActiveNameEnable) {
             activeNameRepository.deleteAll();
+            lotRepository.deleteAll();
+            lotStickerRepository.deleteAll();
             log.warn("ActiveName tables (real data) filled");
             for (String activeName : activeNames) {
                 activeNameRepository.save(
                         new ActiveName(activeName, 100, defaultActiveNameParsePeriod)
                 );
             }
-            for (String activeNameWithoutExterior : activeNamesWithoutExterior) {
-                for (String exterior: exteriorList) {
-                    activeNameRepository.save(
-                            new ActiveName(activeNameWithoutExterior + " " + exterior, 100, defaultActiveNameParsePeriod)
-                    );
-                }
-            }
+            // вот это может создать несуществующий айтем
+//            for (String activeNameWithoutExterior : activeNamesWithoutExterior) {
+//                for (String exterior : exteriorList) {
+//                    activeNameRepository.save(
+//                            new ActiveName(activeNameWithoutExterior + " " + exterior, 100, defaultActiveNameParsePeriod)
+//                    );
+//                }
+//            }
         }
     }
 }
