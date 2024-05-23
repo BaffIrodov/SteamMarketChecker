@@ -27,6 +27,7 @@ public class LotService {
     private final ActualCurrencyRelationReader actualCurrencyRelationReader;
     private final LotRepository lotRepository;
     private final ActualCurrencyRelationRepository actualCurrencyRelationRepository;
+    private final TelegramBotService telegramBotService;
 
     public List<LotDto> getAllLots(Boolean onlyActual, Boolean onlyCompleteness, Boolean onlyProfitability) {
         // todo надо маппиться нормально - пока и так сойдет
@@ -65,7 +66,7 @@ public class LotService {
                         lot.setRealPrice(
                                 lot.getSteamItem().getMinPrice() * currencyRelation.getRelation()
                                         + (lot.getLotStickerList().stream().map(e -> e.getSteamSticker().getMinPrice() * currencyRelation.getRelation())
-                                        .mapToDouble(e -> e).sum() / 10)
+                                        .mapToDouble(e -> e).sum() / 17)
                         );
                         lot.setProfit(((lot.getRealPrice() * 0.85) - lot.getConvertedPrice()));
                         lot.setProfitability(lot.getProfit() > 0);
@@ -74,6 +75,56 @@ public class LotService {
                 }
             }
             lotRepository.saveAllAndFlush(allLots);
+        }
+    }
+
+    @Scheduled(fixedDelayString = "${scheduled.telegram-bot}", initialDelay = 1000)
+    public void sendTelegramMessageToBaff() {
+        String messageToBaff = "";
+        List<ActualCurrencyRelation> actualCurrencyRelations = actualCurrencyRelationRepository.findAllByArchive(false);
+        List<Lot> allLots = lotRepository.findAll();
+        List<Lot> lotsWithProfit = allLots.stream().filter(lot -> lot.isCompleteness() && lot.isActual() && lot.isProfitability()).toList();
+        if (lotsWithProfit.size() > 0) {
+            boolean neededToSend = false;
+            messageToBaff += "Есть выгодные предложения:\n";
+            if (actualCurrencyRelations.size() == 1) messageToBaff += "(Цена в рублях)\n";
+            int index = 0;
+            for (Lot lot : lotsWithProfit) {
+                LotDto lotDto = new LotDto(lot);
+                if (actualCurrencyRelations.size() == 1) {
+                    Double currencyRelation = actualCurrencyRelations.get(0).getRelation();
+                    lotDto.setProfit(lotDto.getProfit() / currencyRelation);
+                    lotDto.setConvertedPrice(lotDto.getConvertedPrice() / currencyRelation);
+                    lotDto.setRealPrice(lotDto.getRealPrice() / currencyRelation);
+                }
+                if (Math.round(lotDto.getProfit()) > 100
+                        && Math.round((lotDto.getProfit() / lotDto.getConvertedPrice() * 100)) > 10) {
+                    neededToSend = true;
+                    index++;
+                    messageToBaff += String.format("\nСкин: %s; \n" +
+                                    "Позиция в листинге: %s; \n" +
+                                    "Стикеры: %s; \n" +
+                                    "Профит: %s; \n" +
+                                    "Профит в процентах: %s; \n" +
+                                    "Изначальная цена: %s;\n",
+                            lotDto.getLotParseTarget(),
+                            lotDto.getPositionInListing(),
+                            lotDto.getStickersAsString(),
+                            Math.round(lotDto.getProfit()),
+                            Math.round((lotDto.getProfit() / lotDto.getConvertedPrice() * 100)),
+                            Math.round(lotDto.getConvertedPrice())
+                    );
+                    if (index > 4) {
+                        telegramBotService.sendMsg(messageToBaff);
+                        messageToBaff = "";
+                        index = 0;
+                    }
+                }
+            }
+            if (neededToSend) {
+                telegramBotService.sendMsg(messageToBaff);
+                telegramBotService.sendMsg("-------------------------- Конец передачи ---------------------------");
+            }
         }
     }
 }

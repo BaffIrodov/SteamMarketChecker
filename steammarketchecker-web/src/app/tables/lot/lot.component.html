@@ -2,7 +2,7 @@
   <div class="table-name">Лоты</div>
 
   <p-button
-    *ngIf="getAllLotsWithZeroPriceItems()"
+    *ngIf="getAllLotsWithZeroPriceItems() && false"
     [label]="'ЕСТЬ СТИКЕРЫ/СКИНЫ С ЦЕНОЙ: 0 (их цена может быть огромной)! Их id: ' + this.itemsIdsWithZeroPrice"
   ></p-button>
 

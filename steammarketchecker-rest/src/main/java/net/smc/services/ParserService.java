@@ -69,6 +69,15 @@ public class ParserService {
         ParseResultForSteamItem parseResultForSteamItem = new ParseResultForSteamItem();
         SteamItemFromJsonDto steamItemFromJsonDto = null;
         String priceOverviewJsonAsString = commonUtils.connectAndGetJsonAsString(url);
+        if (priceOverviewJsonAsString.equals("")) { //todo - посмотреть при эксплуатации, можно ли убрать
+            // Произошла ошибка парсинга или такого steamItem не существует
+            System.out.println("(Пришла пустая строка) Произошла ошибка парсинга или такого steamItem не существует; Для url: " + url);
+            steamItemFromJsonDto = new SteamItemFromJsonDto();
+            steamItemFromJsonDto.setMinPrice(-1d);
+            parseResultForSteamItem.setConnectSuccessful(true);
+            parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
+            return parseResultForSteamItem;
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject priceOverviewJson = gson.fromJson(priceOverviewJsonAsString, JsonObject.class);
         if (priceOverviewJson != null && priceOverviewJson.asMap().get("success").getAsBoolean()
@@ -76,7 +85,22 @@ public class ParserService {
             steamItemFromJsonDto = new SteamItemFromJsonDto(priceOverviewJson);
             parseResultForSteamItem.setConnectSuccessful(true);
             parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
-        } else {
+        } else if (priceOverviewJson != null && priceOverviewJson.toString().equals("{\"success\":true}"))  {
+            // SteamItem существует, но крайне дорогой, поэтому его нет на ТП
+            System.out.println("SteamItem существует, но крайне дорогой, поэтому его нет на ТП; Для url: " + url);
+            steamItemFromJsonDto = new SteamItemFromJsonDto();
+            steamItemFromJsonDto.setMinPrice(0d);
+            parseResultForSteamItem.setConnectSuccessful(true);
+            parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
+        } else if (priceOverviewJson != null && priceOverviewJson.toString().equals("{\"success\":false}")) {
+            // Произошла ошибка парсинга или такого steamItem не существует
+            System.out.println("Произошла ошибка парсинга или такого steamItem не существует; Для url: " + url);
+            steamItemFromJsonDto = new SteamItemFromJsonDto();
+            steamItemFromJsonDto.setMinPrice(-1d);
+            parseResultForSteamItem.setConnectSuccessful(true);
+            parseResultForSteamItem.setSteamItemFromJsonDto(steamItemFromJsonDto);
+        }
+        else {
             log.error("Не удалось распарсить steamItem по юрлу: " + url);
         }
         return parseResultForSteamItem;
